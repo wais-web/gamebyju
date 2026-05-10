@@ -109,6 +109,7 @@ html,body{width:100%;height:100%;background:#0a0e1a;display:flex;align-items:cen
 .pk-name{font-size:12px;color:#f0e0ff;font-weight:800;line-height:1;margin-bottom:3px}
 .pk-eff{font-size:9px;color:#c8b8f0;line-height:1.4}
 .pk-src{font-size:8px;color:#6655aa;margin-top:2px;font-style:italic}
+.pk-stack{display:inline-block;background:#f9c74f;color:#1a0a00;font-size:8px;font-weight:900;padding:1px 5px;border-radius:6px;margin-left:5px;vertical-align:middle}
 .pk-skip{font-size:10px;color:rgba(255,255,255,.3);margin-top:10px;cursor:pointer;text-decoration:underline}
 .pk-skip:hover{color:rgba(255,255,255,.6)}
 .fd{position:absolute;font-size:14px;font-weight:800;pointer-events:none;text-shadow:0 1px 3px #000;white-space:nowrap;transition:transform .9s ease-out,opacity .9s}
@@ -628,7 +629,7 @@ const PASSIVE_POOL = [
   { key:'raido',        icon:'⚡', name:'Raido Rune',          src:'Rune',      eff:'ATK SPD +8%',         apply:p=>{ p.atkSpd=(p.atkSpd||0)+.08; } },
 ];
 
-let pickedPassiveKeys = new Set();
+let pickedPassiveKeys = new Map(); // key -> stack count (no limit)
 let pendingPickLevel = 0;
 
 // Map selCls keys to PASSIVE_POOL src values
@@ -647,13 +648,7 @@ function rollPassivePick() {
   const clsSrc = CLS_TO_SRC[selCls] || '';
   const options = [];
 
-  // Weapon options: upgrade existing or add new slot
-  const allClassWeapons = Object.entries(WEAPON_DEFS).filter(([k, w]) => {
-    // Match weapon key to class by checking CLASS_LOADOUTS and nearby keys
-    const loadout = CLASS_LOADOUTS[selCls] || [];
-    return loadout.includes(k) || true; // all weapons available as picks
-  });
-  // Add weapons player doesn't have yet (from their class loadout pool)
+  // Weapon options: add new slot if empty slot exists
   const classLoadout = CLASS_LOADOUTS[selCls] || [];
   for (const key of classLoadout) {
     if (!key) continue;
@@ -665,6 +660,7 @@ function rollPassivePick() {
         name: wDef.lbl,
         src: '⚔ New Weapon',
         eff: 'Auto-fires ' + wDef.lbl + ' every ' + wDef.cd.toFixed(1) + 's',
+        stacks: 0,
         apply: () => {
           const slot = weaponSlots.findIndex(s => s === null);
           if (slot >= 0) {
@@ -677,16 +673,19 @@ function rollPassivePick() {
     }
   }
 
-  // Passive options
+  // All class + Rune passives — stackable, no uniqueness limit
   const available = PASSIVE_POOL.filter(p =>
-    !pickedPassiveKeys.has(p.key) &&
-    (p.src === clsSrc || p.src === 'Rune')
+    p.src === clsSrc || p.src === 'Rune'
   );
 
   const combined = [...options, ...available];
   if (combined.length === 0) return [];
+  // Shuffle and pick 3
   const shuffled = combined.slice().sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, Math.min(3, shuffled.length));
+  return shuffled.slice(0, 3).map(p => ({
+    ...p,
+    stacks: pickedPassiveKeys.get(p.key) || 0,
+  }));
 }
 
 function openPassivePick(level) {
@@ -699,7 +698,8 @@ function openPassivePick(level) {
   for (const p of picks) {
     const card = document.createElement('div');
     card.className = 'pk-card';
-    card.innerHTML = `<div class="pk-icon">${p.icon}</div><div class="pk-text"><div class="pk-name">${p.name}</div><div class="pk-eff">${p.eff}</div><div class="pk-src">${p.src}</div></div>`;
+    const stackBadge = p.stacks > 0 ? `<div class="pk-stack">Lv.${p.stacks+1}</div>` : '';
+    card.innerHTML = `<div class="pk-icon">${p.icon}</div><div class="pk-text"><div class="pk-name">${p.name}${stackBadge}</div><div class="pk-eff">${p.eff}</div><div class="pk-src">${p.src}</div></div>`;
     card.onclick = () => selectPassive(p);
     grid.appendChild(card);
   }
@@ -711,7 +711,8 @@ function selectPassive(p) {
   if (p.key && p.key.startsWith('weapon_')) {
     p.apply();
   } else {
-    pickedPassiveKeys.add(p.key);
+    // Increment stack count
+    pickedPassiveKeys.set(p.key, (pickedPassiveKeys.get(p.key) || 0) + 1);
     p.apply(passives);
     if (passives.atkSpd) {
       for (let i = 0; i < 4; i++) {
@@ -1150,7 +1151,7 @@ function _startGameInner(){
   };
   pendingLevels=[];statPanelOpen=false;totalUnspentPoints=0;
   currentZone=0; bossActive=null; bossSpawned=false; lastBossLevel=0; zoneKills=0;
-  pickedPassiveKeys=new Set(); pendingPickLevel=0; gamePaused=false;
+  pickedPassiveKeys=new Map(); pendingPickLevel=0; gamePaused=false;
   pickQueue=[]; pickPending=false;
   wave=1; waveTimer=WAVE_INTERVAL; enemyAITimer=0;
   // Load weapon slots for this class
@@ -2158,16 +2159,22 @@ function update(dt){
   tickPassives(dt);
 
   // Movement input — player only, weapons fire automatically
-  let mdx=0,mdz=0;
-  if(KEYS['ArrowLeft']||KEYS['KeyA'])mdx-=1;
-  if(KEYS['ArrowRight']||KEYS['KeyD'])mdx+=1;
-  if(KEYS['ArrowUp']||KEYS['KeyW'])mdz-=1;
-  if(KEYS['ArrowDown']||KEYS['KeyS'])mdz+=1;
-  if(joyActive){mdx=joyDx;mdz=joyDy;}
+  // Raw screen-space input
+  let sx=0, sy=0;
+  if(KEYS['ArrowLeft'] ||KEYS['KeyA']) sx-=1;
+  if(KEYS['ArrowRight']||KEYS['KeyD']) sx+=1;
+  if(KEYS['ArrowUp']   ||KEYS['KeyW']) sy-=1;
+  if(KEYS['ArrowDown'] ||KEYS['KeyS']) sy+=1;
+  if(joyActive){ sx=joyDx; sy=joyDy; }
+
+  // Transform screen input to world XZ using camera axes
+  // Camera at offset (+20,20,+20): right=(+0.707,0,-0.707), screenDown=(+0.408,_,+0.408)
+  let mdx = sx * 0.707 + sy * 0.707;
+  let mdz = sx *-0.707 + sy * 0.707;
 
   const ml=Math.sqrt(mdx*mdx+mdz*mdz);
   if(ml>0){
-    mdx/=ml;mdz/=ml;
+    mdx/=ml; mdz/=ml;
     const spd=(P.spd+(passives.moveSpd||0))*dt;
     P.x=Math.max(.5,Math.min(MAPSZ-.5,P.x+mdx*spd));
     P.z=Math.max(.5,Math.min(MAPSZ-.5,P.z+mdz*spd));
