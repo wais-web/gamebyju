@@ -733,6 +733,7 @@ const UPGRADES = [
   { key:'critChance',icon:'🎯', name:'Critical Chance', desc:'+3% crit chance per rank',            maxRank:8,  baseCost:110, costMult:1.65, color:'#aaffee' },
   { key:'goldFind', icon:'💰',  name:'Gold Find',       desc:'+15% gold from enemies per rank',     maxRank:6,  baseCost:60,  costMult:1.5,  color:'#f9c74f' },
   { key:'defUp',    icon:'🛡️',  name:'Iron Skin',       desc:'+5 DEF per rank',                    maxRank:8,  baseCost:100, costMult:1.6,  color:'#aabbcc' },
+  { key:'atkSpd',   icon:'⚡',  name:'Attack Speed',    desc:'+4% weapon CD reduction per rank',   maxRank:20, baseCost:120, costMult:1.45, color:'#ffee44' },
 ];
 
 const upgradeRanks = {}; // key → current rank
@@ -750,6 +751,7 @@ const passives = {
   critChance: 0,  // bonus crit %
   goldFind: 0,    // fraction bonus to gold
   defUp: 0,       // flat DEF bonus
+  atkSpd: 0,      // weapon CD reduction fraction (0.04 per rank)
 };
 
 let hpRegenTimer = 0;
@@ -870,7 +872,7 @@ function applyUpgradeEffect(key, oldRank, newRank) {
       break;
     case 'critChance':
       passives.critChance = newRank * 3;
-      P.critChance = (CLASSES[selCls] ? 5 : 5) + (P.stats.DEX||0)*2 + passives.critChance;
+      P.critChance = 5 + passives.critChance;
       break;
     case 'goldFind':
       passives.goldFind = newRank * 0.15;
@@ -878,6 +880,12 @@ function applyUpgradeEffect(key, oldRank, newRank) {
     case 'defUp':
       passives.defUp = newRank * 5;
       break;
+    case 'atkSpd': {
+      // Add only the delta from the new rank — preserves passive pick stack
+      const delta = (newRank - oldRank) * 0.04;
+      passives.atkSpd = (passives.atkSpd || 0) + delta;
+      break;
+    }
   }
 }
 
@@ -1665,7 +1673,7 @@ function tickWeapons(dt) {
         break;
       }
     }
-    weaponCDs[i] = wDef.cd * (1 - (passives.atkSpd || 0) * 0.5);
+    weaponCDs[i] = Math.max(0.12, wDef.cd * (1 - (passives.atkSpd || 0)));
   }
 }
 
