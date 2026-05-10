@@ -116,33 +116,7 @@ html,body{width:100%;height:100%;background:#0a0e1a;display:flex;align-items:cen
 .fd.enemy{color:#ffe566}.fd.player{color:#ff7777}.fd.heal{color:#7fff9a}.fd.special{color:#ddb8ff;font-size:16px}
 
 /* STAT DISTRIBUTION PANEL */
-#statpanel{position:absolute;inset:0;background:rgba(5,3,15,.88);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:150;border-radius:16px;pointer-events:all}
-#statpanel .sp-title{font-size:11px;color:#888;letter-spacing:3px;font-weight:700;margin-bottom:4px}
-#statpanel .sp-lvl{font-size:22px;color:#f9c74f;font-weight:800;margin-bottom:2px;text-shadow:0 0 20px rgba(249,199,79,.5)}
-#statpanel .sp-pts{font-size:12px;color:#c8b8f0;margin-bottom:16px;font-weight:700}
-#statpanel .sp-pts span{color:#f9c74f;font-size:16px;font-weight:800}
-.sp-grid{display:flex;flex-direction:column;gap:8px;width:300px;margin-bottom:16px}
-.sp-row{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 12px;display:flex;align-items:center;gap:8px}
-.sp-row:hover{border-color:rgba(249,199,79,.3)}
-.sp-icon{font-size:18px;width:24px;text-align:center;flex-shrink:0}
-.sp-info{flex:1}
-.sp-name{font-size:11px;color:#f0e0ff;font-weight:800;line-height:1}
-.sp-desc{font-size:8px;color:#9d8bb0;margin-top:1px}
-.sp-val{font-size:14px;color:#f9c74f;font-weight:800;min-width:32px;text-align:center}
-.sp-btns{display:flex;gap:4px;align-items:center}
-.sp-btn{width:26px;height:26px;border-radius:50%;border:1.5px solid rgba(255,255,255,.25);background:rgba(0,0,0,.4);color:#fff;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;line-height:1}
-.sp-btn:hover{background:rgba(249,199,79,.2);border-color:#f9c74f;color:#f9c74f}
-.sp-btn:disabled{opacity:.25;cursor:not-allowed}
-.sp-btn.plus{border-color:rgba(100,200,100,.4);color:#88ff88}
-.sp-btn.plus:hover{background:rgba(100,200,100,.2);border-color:#88ff88}
-.sp-preview{font-size:8px;color:#66ff99;margin-left:2px;min-width:36px}
-.sp-footer{display:flex;gap:10px;align-items:center}
-.sp-confirm{background:linear-gradient(135deg,#f9c74f,#f8961e);color:#1a0a00;font-size:13px;font-weight:800;padding:10px 36px;border-radius:30px;border:none;cursor:pointer;letter-spacing:1px;box-shadow:0 4px 20px rgba(249,199,79,.4);transition:transform .1s}
-.sp-confirm:active{transform:scale(.96)}
-.sp-close{background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);font-size:12px;font-weight:700;padding:10px 18px;border-radius:30px;border:1.5px solid rgba(255,255,255,.15);cursor:pointer;transition:all .15s}
-.sp-close:hover{background:rgba(255,255,255,.15);color:#fff}
-.sp-statrow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;font-size:9px;color:#9d8bb0}
-.sp-statrow span{color:#c8b8f0;font-weight:700}
+/* pt-badge for pending picks */
 /* Unspent points badge on portrait */
 #pt-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:#f9c74f;color:#1a0a00;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;border:1.5px solid #000;pointer-events:none;z-index:10}
 #pport-wrap{position:relative;flex-shrink:0;cursor:pointer;pointer-events:all}
@@ -218,19 +192,6 @@ html,body{width:100%;height:100%;background:#0a0e1a;display:flex;align-items:cen
     <div class="pk-lvl" id="pk-lvl">Level 2 — Choose a Passive</div>
     <div class="pk-grid" id="pk-grid"></div>
     <div class="pk-skip" onclick="skipPassivePick()">Skip for now</div>
-  </div>
-
-  <!-- STAT DISTRIBUTION PANEL -->
-  <div id="statpanel">
-    <div class="sp-title">✦ CHARACTER STATS ✦</div>
-    <div class="sp-lvl" id="sp-lvl">Lv.1 — Aerin</div>
-    <div class="sp-pts">Unspent points: <span id="sp-pts">0</span></div>
-    <div class="sp-statrow" id="sp-statrow"></div>
-    <div class="sp-grid" id="sp-grid"></div>
-    <div class="sp-footer">
-      <button class="sp-close" onclick="closeStatPanel()">✕ Close</button>
-      <button class="sp-confirm" id="sp-confirm" onclick="confirmStats()">APPLY</button>
-    </div>
   </div>
 
   <!-- PASSIVE UPGRADE SHOP -->
@@ -461,15 +422,16 @@ const WEAPON_DEFS = {
 };
 
 // Default loadout per class (weapon keys, max 4 slots)
+// First 3 = starting weapons, 4th = unlockable via level-up pick
 const CLASS_LOADOUTS = {
-  berserker:   ['assault',      'axeThrow',     'cuttingEdge',  null],
-  seeress:     ['mindBlast',    'temporalTrap', 'briarThorns',  null],
-  revenant:    ['focusFire',    'skullShot',    'grapplingWeb', null],
-  flameSister: ['flamingRay',   'shrapnelPot',  'danceDaggers', null],
-  warden:      ['ironFist',     'seismicShock', 'shieldwall',   null],
-  kinslayer:   ['fallenValkyrie','shadowImages','javelins',      null],
-  archmage:    ['magicBall',    'magicPulse',   'magicNova',    null],
-  conan:       ['flurryBlades', 'roarLion',     'cromRampage',  null],
+  berserker:   ['assault',      'axeThrow',      'cuttingEdge',   'cromRampage'],
+  seeress:     ['mindBlast',    'temporalTrap',  'briarThorns',   'magicNova'],
+  revenant:    ['focusFire',    'skullShot',     'grapplingWeb',  'javelins'],
+  flameSister: ['flamingRay',   'shrapnelPot',   'danceDaggers',  'mindBlast'],
+  warden:      ['ironFist',     'seismicShock',  'shieldwall',    'cuttingEdge'],
+  kinslayer:   ['fallenValkyrie','shadowImages', 'javelins',      'skullShot'],
+  archmage:    ['magicBall',    'magicPulse',    'magicNova',     'temporalTrap'],
+  conan:       ['flurryBlades', 'roarLion',      'cromRampage',   'axeThrow'],
 };
 
 // Active weapon slots — keys into WEAPON_DEFS (or null)
@@ -613,7 +575,7 @@ const PASSIVE_POOL = [
   { key:'exiled_winds', icon:'🌬️', name:'Exiled Winds',       src:'Kinslayer', eff:'Move SPD +12%',       apply:p=>{ p.moveSpd=(p.moveSpd||0)+.72; } },
   { key:'shadowblade',  icon:'🌑', name:'Shadowblade',         src:'Kinslayer', eff:'Class Skill DMG +25%',apply:p=>{ p.skillDmg=(p.skillDmg||0)+.25; } },
   { key:'magic_weapon', icon:'🔮', name:'Magic Weapon',        src:'Archmage',  eff:'ATK DMG +15%',        apply:p=>{ p.atkPct=(p.atkPct||0)+.15; } },
-  { key:'explosive_nat',icon:'💥', name:'Explosive Nature',    src:'Archmage',  eff:'Chain lightning 15%', apply:p=>{ p.chainLightning=(p.chainLightning||0)+.15; } },
+  { key:'explosive_nat',icon:'⚡', name:'Explosive Nature', src:'Archmage', eff:'15% chain to nearby enemy on hit', apply:p=>{ p.chainLightning=(p.chainLightning||0)+.15; } },
   { key:'piercing',     icon:'🎯', name:'Piercing',            src:'Archmage',  eff:'Skill Crit +8%',      apply:p=>{ P.critChance+=8; } },
   { key:'expeditious',  icon:'💨', name:'Expeditious Retreat', src:'Archmage',  eff:'Move SPD +15%',       apply:p=>{ p.moveSpd=(p.moveSpd||0)+.9; } },
   { key:'triumph_heal', icon:'👑', name:'Fighter',             src:'Conan',     eff:'Heal 15 HP on kill',  apply:p=>{ p.killHeal=(p.killHeal||0)+15; } },
@@ -648,26 +610,23 @@ function rollPassivePick() {
   const clsSrc = CLS_TO_SRC[selCls] || '';
   const options = [];
 
-  // Weapon options: add new slot if empty slot exists
-  const classLoadout = CLASS_LOADOUTS[selCls] || [];
-  for (const key of classLoadout) {
-    if (!key) continue;
-    if (!weaponSlots.includes(key)) {
+  // Offer the 4th weapon if slot 3 is still empty
+  if (weaponSlots[3] === null) {
+    const key = (CLASS_LOADOUTS[selCls] || [])[3];
+    if (key && WEAPON_DEFS[key]) {
       const wDef = WEAPON_DEFS[key];
       options.push({
-        key: 'weapon_'+key,
+        key: 'weapon_' + key,
         icon: wDef.em,
         name: wDef.lbl,
         src: '⚔ New Weapon',
-        eff: 'Auto-fires ' + wDef.lbl + ' every ' + wDef.cd.toFixed(1) + 's',
+        eff: 'Unlock ' + wDef.lbl + ' · auto-fires every ' + wDef.cd.toFixed(1) + 's',
         stacks: 0,
         apply: () => {
-          const slot = weaponSlots.findIndex(s => s === null);
-          if (slot >= 0) {
-            weaponSlots[slot] = key;
-            document.getElementById('se'+slot).textContent = wDef.em;
-            document.getElementById('sl'+slot).textContent = wDef.lbl;
-          }
+          weaponSlots[3] = key;
+          weaponCDs[3] = 0;
+          document.getElementById('se3').textContent = wDef.em;
+          document.getElementById('sl3').textContent = wDef.lbl;
         }
       });
     }
@@ -680,7 +639,6 @@ function rollPassivePick() {
 
   const combined = [...options, ...available];
   if (combined.length === 0) return [];
-  // Shuffle and pick 3
   const shuffled = combined.slice().sort(() => Math.random() - 0.5);
   return shuffled.slice(0, 3).map(p => ({
     ...p,
@@ -692,7 +650,8 @@ function openPassivePick(level) {
   pendingPickLevel = level;
   const picks = rollPassivePick();
   if (picks.length === 0) return; // nothing left to pick
-  document.getElementById('pk-lvl').textContent = 'Level ' + level + ' — Choose a Passive';
+  const remaining = pickQueue.length > 0 ? ` (+${pickQueue.length} more)` : '';
+  document.getElementById('pk-lvl').textContent = 'Level ' + level + ' — Choose a Passive' + remaining;
   const grid = document.getElementById('pk-grid');
   grid.innerHTML = '';
   for (const p of picks) {
@@ -725,11 +684,14 @@ function selectPassive(p) {
   gamePaused = false;
   const label = p.key && p.key.startsWith('weapon_') ? '⚔ New weapon: ' + p.name + '!' : '✨ ' + p.name + ' — ' + p.eff;
   setLog(label, 3000);
+  // Show next queued pick immediately
+  if (pickQueue.length > 0) setTimeout(showNextPick, 300);
 }
 
 function skipPassivePick() {
   document.getElementById('pickpanel').style.display = 'none';
   gamePaused = false;
+  if (pickQueue.length > 0) setTimeout(showNextPick, 300);
 }
 
 // ── ARCHER ABILITIES (kept for compat but simplified) ──────────────────────────
@@ -979,58 +941,255 @@ let playerMesh=null;
 let playerGroup=null;
 let shadowCircle=null;
 
-function buildPlayerMesh(cls){
-  const cd=CLASSES[cls];
-  if(playerGroup) scene.remove(playerGroup);
-  playerGroup=new THREE.Group();
+// ── PLAYER 3D MODEL (chibi box mesh, class-coloured) ─────────────────────────
+function buildPlayerMesh(cls) {
+  const cd = CLASSES[cls];
+  if (playerGroup) scene.remove(playerGroup);
+  playerGroup = new THREE.Group();
 
-  const bodyMat=new THREE.MeshLambertMaterial({color:cd.bodyCol});
-  const legMat =new THREE.MeshLambertMaterial({color:cd.legCol});
-  const skinMat=new THREE.MeshLambertMaterial({color:0xf4c98a});
-  const hairMat=new THREE.MeshLambertMaterial({color:0x4a2e12});
-  const eyeMat =new THREE.MeshLambertMaterial({color:0x222222});
-  const wpnMat =new THREE.MeshLambertMaterial({color:0xc0c0e0});
+  const bodyMat = new THREE.MeshLambertMaterial({color: cd.bodyCol});
+  const legMat  = new THREE.MeshLambertMaterial({color: cd.legCol});
+  const skinMat = new THREE.MeshLambertMaterial({color: 0xf5c98a});
+  const hairCol  = ['berserker','conan','warden'].includes(cls) ? 0x3a1a08
+                 : ['archmage','seeress'].includes(cls)         ? 0x6633aa
+                 : cls==='revenant'  ? 0x223366
+                 : cls==='kinslayer' ? 0x111133 : 0x4a2e12;
+  const hairMat = new THREE.MeshLambertMaterial({color: hairCol});
+  const eyeMat  = new THREE.MeshLambertMaterial({color: 0x111111});
+  const wpnMat  = new THREE.MeshLambertMaterial({color: 0xb0b8d0});
+  const wpnAcc  = new THREE.MeshLambertMaterial({color: 0xd4a017}); // gold accent
 
-  // Legs
-  const legGeo=new THREE.BoxGeometry(.18,.42,.18);
-  const legL=new THREE.Mesh(legGeo,legMat); legL.position.set(-.12,.21,0); legL.castShadow=true; playerGroup.add(legL);
-  const legR=new THREE.Mesh(legGeo,legMat); legR.position.set( .12,.21,0); legR.castShadow=true; playerGroup.add(legR);
-  // Body
-  const body=new THREE.Mesh(new THREE.BoxGeometry(.44,.48,.28),bodyMat); body.position.y=.75; body.castShadow=true; playerGroup.add(body);
-  // Arms
-  const armGeo=new THREE.BoxGeometry(.14,.38,.18);
-  const armL=new THREE.Mesh(armGeo,bodyMat); armL.position.set(-.3,.7,0); armL.castShadow=true; playerGroup.add(armL);
-  const armR=new THREE.Mesh(armGeo,bodyMat); armR.position.set( .3,.7,0); armR.castShadow=true; playerGroup.add(armR);
-  // Head
-  const head=new THREE.Mesh(new THREE.BoxGeometry(.38,.38,.32),skinMat); head.position.y=1.12; head.castShadow=true; playerGroup.add(head);
-  // Hair
-  const hair=new THREE.Mesh(new THREE.BoxGeometry(.42,.18,.34),hairMat); hair.position.y=1.28; playerGroup.add(hair);
-  // Eyes
-  const eyeGeo=new THREE.BoxGeometry(.07,.07,.04);
-  const eyeL=new THREE.Mesh(eyeGeo,eyeMat); eyeL.position.set(-.1,1.13,.17); playerGroup.add(eyeL);
-  const eyeR=new THREE.Mesh(eyeGeo,eyeMat); eyeR.position.set( .1,1.13,.17); playerGroup.add(eyeR);
-  // Weapon (sword)
-  const wpn=new THREE.Mesh(new THREE.BoxGeometry(.06,.55,.06),wpnMat); wpn.position.set(.36,.88,.1); playerGroup.add(wpn);
-  const hilt=new THREE.Mesh(new THREE.BoxGeometry(.22,.06,.06),wpnMat); hilt.position.set(.36,.65,.1); playerGroup.add(hilt);
+  // ── LEGS ──
+  const legGeo = new THREE.BoxGeometry(.17,.40,.17);
+  const legL = new THREE.Mesh(legGeo, legMat); legL.position.set(-.11,.20,0); legL.castShadow=true;
+  const legR = new THREE.Mesh(legGeo, legMat); legR.position.set( .11,.20,0); legR.castShadow=true;
+  playerGroup.add(legL, legR);
 
-  // Shadow circle on ground
-  const shadowGeo=new THREE.CircleGeometry(.3,16);
-  shadowCircle=new THREE.Mesh(shadowGeo,MAT.shadow);
-  shadowCircle.rotation.x=-Math.PI/2; shadowCircle.position.y=.11;
+  // Boot caps
+  const bootGeo = new THREE.BoxGeometry(.19,.10,.19);
+  const bootL = new THREE.Mesh(bootGeo, legMat); bootL.position.set(-.11,.06,0); bootL.castShadow=true;
+  const bootR = new THREE.Mesh(bootGeo, legMat); bootR.position.set( .11,.06,0); bootR.castShadow=true;
+  playerGroup.add(bootL, bootR);
+
+  // ── BODY ──
+  const body = new THREE.Mesh(new THREE.BoxGeometry(.46,.46,.26), bodyMat);
+  body.position.y = .72; body.castShadow = true; playerGroup.add(body);
+
+  // Belt
+  const beltMat = new THREE.MeshLambertMaterial({color: 0x2a1a08});
+  const belt = new THREE.Mesh(new THREE.BoxGeometry(.48,.07,.28), beltMat);
+  belt.position.y = .50; playerGroup.add(belt);
+
+  // ── ARMS ──
+  const armGeo = new THREE.BoxGeometry(.14,.36,.16);
+  const armL = new THREE.Mesh(armGeo, bodyMat); armL.position.set(-.31,.68,0); armL.castShadow=true;
+  const armR = new THREE.Mesh(armGeo, bodyMat); armR.position.set( .31,.68,0); armR.castShadow=true;
+  playerGroup.add(armL, armR);
+
+  // Hands
+  const handGeo = new THREE.BoxGeometry(.13,.13,.13);
+  const handL = new THREE.Mesh(handGeo, skinMat); handL.position.set(-.31,.50,0);
+  const handR = new THREE.Mesh(handGeo, skinMat); handR.position.set( .31,.50,0);
+  playerGroup.add(handL, handR);
+
+  // ── NECK ──
+  const neck = new THREE.Mesh(new THREE.BoxGeometry(.14,.12,.14), skinMat);
+  neck.position.y = .98; playerGroup.add(neck);
+
+  // ── HEAD (chibi: big) ──
+  const head = new THREE.Mesh(new THREE.BoxGeometry(.42,.40,.36), skinMat);
+  head.position.y = 1.22; head.castShadow = true; head.name = 'playerHead'; playerGroup.add(head);
+
+  // Hair top
+  const hairTop = new THREE.Mesh(new THREE.BoxGeometry(.44,.16,.38), hairMat);
+  hairTop.position.y = 1.40; playerGroup.add(hairTop);
+  // Hair back
+  const hairBack = new THREE.Mesh(new THREE.BoxGeometry(.40,.28,.08), hairMat);
+  hairBack.position.set(0, 1.22, -.20); playerGroup.add(hairBack);
+  // Hair sides
+  const hairSideGeo = new THREE.BoxGeometry(.08,.28,.34);
+  const hairSL = new THREE.Mesh(hairSideGeo, hairMat); hairSL.position.set(-.22, 1.22, 0); playerGroup.add(hairSL);
+  const hairSR = new THREE.Mesh(hairSideGeo, hairMat); hairSR.position.set( .22, 1.22, 0); playerGroup.add(hairSR);
+
+  // ── EYES ──
+  const eyeGeo = new THREE.BoxGeometry(.09,.09,.04);
+  const eyeL = new THREE.Mesh(eyeGeo, eyeMat); eyeL.position.set(-.12, 1.22, .19); playerGroup.add(eyeL);
+  const eyeR = new THREE.Mesh(eyeGeo, eyeMat); eyeR.position.set( .12, 1.22, .19); playerGroup.add(eyeR);
+  // Eye whites
+  const ewGeo = new THREE.BoxGeometry(.11,.11,.03);
+  const ewMat = new THREE.MeshLambertMaterial({color:0xffffff});
+  const ewL = new THREE.Mesh(ewGeo, ewMat); ewL.position.set(-.12, 1.22, .18); playerGroup.add(ewL);
+  const ewR = new THREE.Mesh(ewGeo, ewMat); ewR.position.set( .12, 1.22, .18); playerGroup.add(ewR);
+
+  // ── CLASS WEAPON / ACCESSORY ──
+  addClassWeaponMesh(playerGroup, cls, wpnMat, wpnAcc, hairMat, bodyMat);
+
+  // ── SHADOW ──
+  const shadowGeo = new THREE.CircleGeometry(.32, 16);
+  shadowCircle = new THREE.Mesh(shadowGeo, MAT.shadow);
+  shadowCircle.rotation.x = -Math.PI/2; shadowCircle.position.y = .11;
   playerGroup.add(shadowCircle);
 
-  // Selection ring
-  const ringGeo=new THREE.RingGeometry(.32,.40,24);
-  const ringMat=new THREE.MeshBasicMaterial({color:0x44aaff,transparent:true,opacity:.6,side:THREE.DoubleSide,depthWrite:false});
-  const ring=new THREE.Mesh(ringGeo,ringMat);
-  ring.rotation.x=-Math.PI/2; ring.position.y=.12; ring.name='playerRing';
+  // ── SELECTION RING ──
+  const ringGeo = new THREE.RingGeometry(.34,.42,24);
+  const ringMat = new THREE.MeshBasicMaterial({color:0x44aaff,transparent:true,opacity:.6,side:THREE.DoubleSide,depthWrite:false});
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.rotation.x = -Math.PI/2; ring.position.y = .12; ring.name = 'playerRing';
   playerGroup.add(ring);
 
-  playerMesh=playerGroup;
+  playerMesh = playerGroup;
   scene.add(playerGroup);
   return playerGroup;
 }
 
+function addClassWeaponMesh(group, cls, wpnMat, wpnAcc, hairMat, bodyMat) {
+  const gld = wpnAcc;
+  const sil = wpnMat;
+  const drk = new THREE.MeshLambertMaterial({color:0x221133});
+
+  if (cls === 'berserker') {
+    // Big axe on right
+    const handle = new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,.70,6), new THREE.MeshLambertMaterial({color:0x5a3010}));
+    handle.position.set(.42,.72,.0);
+    const blade = new THREE.Mesh(new THREE.BoxGeometry(.08,.42,.04), sil);
+    blade.position.set(.58,.88,.0);
+    const bladePeak = new THREE.Mesh(new THREE.BoxGeometry(.22,.12,.04), sil);
+    bladePeak.position.set(.60,.94,.0);
+    // Horned helmet
+    const helm = new THREE.Mesh(new THREE.BoxGeometry(.46,.14,.40), new THREE.MeshLambertMaterial({color:0x8a6020}));
+    helm.position.set(0,1.52,0);
+    const hornGeo = new THREE.CylinderGeometry(.04,.07,.22,6);
+    const hornMat = new THREE.MeshLambertMaterial({color:0xeeddaa});
+    const hornL = new THREE.Mesh(hornGeo, hornMat); hornL.position.set(-.22,1.64,0); hornL.rotation.z=.4;
+    const hornR = new THREE.Mesh(hornGeo, hornMat); hornR.position.set( .22,1.64,0); hornR.rotation.z=-.4;
+    group.add(handle, blade, bladePeak, helm, hornL, hornR);
+
+  } else if (cls === 'seeress') {
+    // Staff with orb
+    const staff = new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.80,6), new THREE.MeshLambertMaterial({color:0x6633aa}));
+    staff.position.set(-.38,.70,.0);
+    const orb = new THREE.Mesh(new THREE.SphereGeometry(.10,10,8), new THREE.MeshLambertMaterial({color:0xcc88ff}));
+    orb.position.set(-.38,1.12,.0);
+    const orbGlow = new THREE.Mesh(new THREE.SphereGeometry(.14,10,8), new THREE.MeshLambertMaterial({color:0x9933cc,transparent:true,opacity:.4}));
+    orbGlow.position.copy(orb.position);
+    // Crown
+    const crown = new THREE.Mesh(new THREE.CylinderGeometry(.23,.22,.10,8), gld);
+    crown.position.set(0,1.46,0);
+    const gem = new THREE.Mesh(new THREE.SphereGeometry(.05,8,6), new THREE.MeshLambertMaterial({color:0xff44cc}));
+    gem.position.set(0,1.52,0);
+    group.add(staff, orb, orbGlow, crown, gem);
+
+  } else if (cls === 'revenant') {
+    // Bow
+    const bowMat = new THREE.MeshLambertMaterial({color:0x7a5010});
+    const bowTop = new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.30,5), bowMat);
+    bowTop.position.set(.42,.92,.0); bowTop.rotation.z=.4;
+    const bowBot = new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.30,5), bowMat);
+    bowBot.position.set(.38,.58,.0); bowBot.rotation.z=-.3;
+    const arrow = new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.36,5), new THREE.MeshLambertMaterial({color:0xc8a060}));
+    arrow.position.set(.40,.74,.0); arrow.rotation.z=Math.PI/2;
+    // Dark hood
+    const hood = new THREE.Mesh(new THREE.BoxGeometry(.50,.20,.42), new THREE.MeshLambertMaterial({color:0x1a3a5a}));
+    hood.position.set(0,1.44,0);
+    const hoodPeak = new THREE.Mesh(new THREE.CylinderGeometry(.05,.22,.18,6), new THREE.MeshLambertMaterial({color:0x1a3a5a}));
+    hoodPeak.position.set(0,1.54,-.04);
+    group.add(bowTop, bowBot, arrow, hood, hoodPeak);
+
+  } else if (cls === 'flameSister') {
+    // Twin daggers
+    const dag1 = new THREE.Mesh(new THREE.BoxGeometry(.05,.34,.05), sil);
+    dag1.position.set(-.34,.62,.08);
+    const dag2 = new THREE.Mesh(new THREE.BoxGeometry(.05,.30,.05), sil);
+    dag2.position.set( .38,.62,.08); dag2.rotation.z=.2;
+    const g1 = new THREE.Mesh(new THREE.BoxGeometry(.14,.05,.06), gld); g1.position.set(-.34,.48,.08);
+    const g2 = new THREE.Mesh(new THREE.BoxGeometry(.14,.05,.06), gld); g2.position.set( .38,.48,.08);
+    // Flame hair
+    const flameGeo = new THREE.ConeGeometry(.08,.22,5);
+    const flameMat = new THREE.MeshLambertMaterial({color:0xff5500,transparent:true,opacity:.85});
+    for (let i=0; i<3; i++) {
+      const f = new THREE.Mesh(flameGeo, flameMat);
+      f.position.set((i-1)*.14, 1.56, 0);
+      f.rotation.z = (Math.random()-.5)*.4;
+      group.add(f);
+    }
+    group.add(dag1, dag2, g1, g2);
+
+  } else if (cls === 'warden') {
+    // Hammer
+    const hHandle = new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,.72,6), new THREE.MeshLambertMaterial({color:0x5a3010}));
+    hHandle.position.set(.42,.70,0);
+    const hammerHead = new THREE.Mesh(new THREE.BoxGeometry(.14,.26,.14), sil);
+    hammerHead.position.set(.42,.96,0);
+    // Shield (left)
+    const shield = new THREE.Mesh(new THREE.BoxGeometry(.06,.42,.36), new THREE.MeshLambertMaterial({color:0x8a6020}));
+    shield.position.set(-.46,.72,0);
+    const shieldBoss = new THREE.Mesh(new THREE.SphereGeometry(.08,8,6), gld);
+    shieldBoss.position.set(-.50,.72,0);
+    // Knight helm
+    const helm = new THREE.Mesh(new THREE.BoxGeometry(.48,.18,.42), new THREE.MeshLambertMaterial({color:0x9a7030}));
+    helm.position.set(0,1.50,0);
+    const visor = new THREE.Mesh(new THREE.BoxGeometry(.28,.07,.04), new THREE.MeshLambertMaterial({color:0x2a1a00}));
+    visor.position.set(0,1.46,.22);
+    group.add(hHandle, hammerHead, shield, shieldBoss, helm, visor);
+
+  } else if (cls === 'kinslayer') {
+    // Glaive
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,.80,6), new THREE.MeshLambertMaterial({color:0x332244}));
+    pole.position.set(.40,.70,0);
+    const blade = new THREE.Mesh(new THREE.BoxGeometry(.06,.38,.04), sil);
+    blade.position.set(.50,.98,0); blade.rotation.z=-.2;
+    // Full mask
+    const mask = new THREE.Mesh(new THREE.BoxGeometry(.46,.34,.06), drk);
+    mask.position.set(0,1.22,.20);
+    const eyeSlit = new THREE.Mesh(new THREE.BoxGeometry(.26,.06,.04), new THREE.MeshLambertMaterial({color:0xcc44ff,emissive:new THREE.Color(0x440066)}));
+    eyeSlit.position.set(0,1.22,.24);
+    // Dark hood
+    const hood = new THREE.Mesh(new THREE.BoxGeometry(.48,.22,.40), drk);
+    hood.position.set(0,1.44,0);
+    group.add(pole, blade, mask, eyeSlit, hood);
+
+  } else if (cls === 'archmage') {
+    // Long staff
+    const staff = new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,.90,6), new THREE.MeshLambertMaterial({color:0x4422aa}));
+    staff.position.set(-.40,.68,0);
+    const orb = new THREE.Mesh(new THREE.SphereGeometry(.12,10,8), new THREE.MeshLambertMaterial({color:0x44aaff}));
+    orb.position.set(-.40,1.16,0);
+    const orbGlow = new THREE.Mesh(new THREE.SphereGeometry(.17,10,8), new THREE.MeshLambertMaterial({color:0x0044cc,transparent:true,opacity:.35}));
+    orbGlow.position.copy(orb.position);
+    // Pointed wizard hat
+    const brim = new THREE.Mesh(new THREE.CylinderGeometry(.30,.28,.08,8), new THREE.MeshLambertMaterial({color:0x1a0844}));
+    brim.position.set(0,1.48,0);
+    const cone = new THREE.Mesh(new THREE.ConeGeometry(.22,.44,8), new THREE.MeshLambertMaterial({color:0x1a0844}));
+    cone.position.set(0,1.70,0);
+    // Star on hat
+    const star = new THREE.Mesh(new THREE.SphereGeometry(.04,5,4), new THREE.MeshLambertMaterial({color:0xffee44}));
+    star.position.set(0,1.96,0);
+    group.add(staff, orb, orbGlow, brim, cone, star);
+
+  } else if (cls === 'conan') {
+    // Sword
+    const blade = new THREE.Mesh(new THREE.BoxGeometry(.06,.56,.05), sil);
+    blade.position.set(.40,.82,0);
+    const hilt = new THREE.Mesh(new THREE.BoxGeometry(.22,.06,.06), gld);
+    hilt.position.set(.40,.56,0);
+    const grip = new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,.20,6), new THREE.MeshLambertMaterial({color:0x3a1a08}));
+    grip.position.set(.40,.48,0);
+    // Crown
+    const crown = new THREE.Mesh(new THREE.CylinderGeometry(.24,.22,.10,8), gld);
+    crown.position.set(0,1.48,0);
+    for (let i=0; i<5; i++) {
+      const tooth = new THREE.Mesh(new THREE.BoxGeometry(.06,.10,.06), gld);
+      const a = (i/5)*Math.PI*2;
+      tooth.position.set(Math.sin(a)*.18, 1.56, Math.cos(a)*.18);
+      group.add(tooth);
+    }
+    // Cape (flat plane behind)
+    const capeMat = new THREE.MeshLambertMaterial({color:0xaa1a00,side:THREE.DoubleSide,transparent:true,opacity:.85});
+    const cape = new THREE.Mesh(new THREE.PlaneGeometry(.60,.70), capeMat);
+    cape.position.set(0,.70,-.16); group.add(cape);
+    group.add(blade, hilt, grip, crown);
+  }
+}
 // ── ENEMY 3D MODELS ──────────────────────────────────────────────────────────
 function buildEnemyMesh(def){
   const g=new THREE.Group();
@@ -1147,17 +1306,15 @@ function _startGameInner(){
     invTimer:0, hurtFlash:0,
     bobAngle:0,
     critChance:5,
-    stats:{ STR:0, VIT:0, INT:0, AGI:0, DEX:0 },
   };
-  pendingLevels=[];statPanelOpen=false;totalUnspentPoints=0;
-  currentZone=0; bossActive=null; bossSpawned=false; lastBossLevel=0; zoneKills=0;
+  currentZone=0; bossActive=null; bossSpawned=false; zoneKills=0; kills=0; gold=0;
   pickedPassiveKeys=new Map(); pendingPickLevel=0; gamePaused=false;
   pickQueue=[]; pickPending=false;
-  wave=1; waveTimer=WAVE_INTERVAL; enemyAITimer=0;
-  // Load weapon slots for this class
-  const loadout = CLASS_LOADOUTS[selCls] || ['assault',null,null,null];
-  weaponSlots = [...loadout];
-  weaponCDs = [0,0,0,0];
+  wave=1; waveTimer=WAVE_INTERVAL; enemyAITimer=0; spriteAttackFlash=0;
+  // Load first 3 weapons; 4th slot stays null until unlocked via level-up pick
+  const loadout = CLASS_LOADOUTS[selCls] || ['assault','assault','assault','assault'];
+  weaponSlots = [loadout[0], loadout[1], loadout[2], null];
+  weaponCDs = [0, 0, 0, 0];
   // Update weapon display icons
   for(let i=0;i<4;i++){
     const key=weaponSlots[i];
@@ -1468,11 +1625,10 @@ function tickWeapons(dt) {
           const dmg = calcDmg(P.atk, wDef.dmgMult * skillMult, e);
           dealDmg(e, dmg, wDef); hit++;
         }
-        if (hit > 0) spawnAoeRing(P.x, P.z, wDef.range);
+        if (hit > 0) { spawnAoeRing(P.x, P.z, wDef.range); triggerAttackFX(wDef); }
         break;
       }
       case 'nova': {
-        // Fires outward in all directions, hits nearby
         let hit = 0;
         const nearby = getNeighborsAt(P.x, P.z, wDef.range);
         for (const e of nearby) {
@@ -1481,15 +1637,15 @@ function tickWeapons(dt) {
           const dmg = calcDmg(P.atk, wDef.dmgMult * skillMult, e);
           dealDmg(e, dmg, wDef); hit++;
         }
-        spawnNovaFX(P.x, P.z, wDef.range);
+        spawnNovaFX(P.x, P.z, wDef.range); triggerAttackFX(wDef);
         if (hit > 1) spawnFloat(hit + 'x', P.x, P.z, 'special');
         break;
       }
       case 'spread': {
-        // Fire at up to `count` nearest enemies
         const count = wDef.count || 3;
         const targets = nearestNInRange(wDef.range, count);
         if (!targets.length) break;
+        triggerAttackFX(wDef);
         for (const t of targets) {
           const dmg = calcDmg(P.atk, wDef.dmgMult * skillMult, t);
           spawnAutoProjectile(t, dmg, wDef);
@@ -1497,15 +1653,15 @@ function tickWeapons(dt) {
         break;
       }
       case 'orbit': {
-        // Orbit weapon: damages all enemies within melee range each tick
         const nearby = getNeighborsAt(P.x, P.z, wDef.range + 0.5);
+        let hit = 0;
         for (const e of nearby) {
           if (e.dead) continue;
           if (dist2(P.x, P.z, e.x, e.z) > wDef.range) continue;
           const dmg = calcDmg(P.atk, wDef.dmgMult * skillMult, e);
-          dealDmg(e, dmg, wDef);
+          dealDmg(e, dmg, wDef); hit++;
         }
-        spawnAoeRing(P.x, P.z, wDef.range);
+        if (hit > 0) { spawnAoeRing(P.x, P.z, wDef.range); triggerAttackFX(wDef); }
         break;
       }
     }
@@ -1513,11 +1669,121 @@ function tickWeapons(dt) {
   }
 }
 
+// ── CLASS ATTACK EFFECTS ─────────────────────────────────────────────────────
+let spriteAttackFlash = 0; // attack flash timer for player mesh emissive pop
+
+const CLASS_PROJ_COLORS = {
+  berserker:0xff4422, seeress:0xcc44ff, revenant:0x88ddff,
+  flameSister:0xff6600, warden:0xffcc44, kinslayer:0xaa22ff,
+  archmage:0x44aaff, conan:0xff8833,
+};
+
+function triggerAttackFX(wDef) {
+  spriteAttackFlash = 0.18;
+  const type = wDef ? wDef.type : 'projectile';
+  if (type === 'aoe' || type === 'nova' || type === 'orbit') spawnGroundBurst(P.x, P.z);
+  else spawnMuzzleFlash(P.x, P.z);
+}
+
+function spawnMuzzleFlash(px, pz) {
+  const col = CLASS_PROJ_COLORS[selCls] || 0xffffff;
+  const geo = new THREE.SphereGeometry(0.22, 7, 5);
+  const mat = new THREE.MeshBasicMaterial({color:col, transparent:true, opacity:0.85, depthWrite:false});
+  const m = new THREE.Mesh(geo, mat);
+  m.position.set(px, 0.9, pz);
+  fxGroup.add(m);
+  slashFXList.push({mesh:m, life:0.12, maxLife:0.12});
+  const rGeo = new THREE.RingGeometry(0, 0.35, 10);
+  const rMat = new THREE.MeshBasicMaterial({color:col, transparent:true, opacity:0.5, side:THREE.DoubleSide, depthWrite:false});
+  const ring = new THREE.Mesh(rGeo, rMat);
+  ring.rotation.x = -Math.PI/2; ring.position.set(px, 0.15, pz);
+  fxGroup.add(ring);
+  aoeFXList.push({mesh:ring, life:0.22, maxLife:0.22, radius:0.35});
+}
+
+function spawnGroundBurst(px, pz) {
+  const col = CLASS_PROJ_COLORS[selCls] || 0xffffff;
+  for (let i = 0; i < 8; i++) {
+    const ang = (i/8)*Math.PI*2;
+    const geo = new THREE.SphereGeometry(0.09+Math.random()*0.07, 4, 3);
+    const mat = new THREE.MeshBasicMaterial({color:col, transparent:true, depthWrite:false});
+    const p = new THREE.Mesh(geo, mat);
+    const r = 0.25+Math.random()*0.3;
+    p.position.set(px+Math.cos(ang)*r, 0.2+Math.random()*0.3, pz+Math.sin(ang)*r);
+    p.userData.vx=Math.cos(ang)*2.2; p.userData.vy=1.2+Math.random()*1.5; p.userData.vz=Math.sin(ang)*2.2;
+    fxGroup.add(p);
+    slashFXList.push({mesh:p, life:0.3, maxLife:0.3, isParticle:true});
+  }
+}
+
+function spawnImpactFX(ex, ez) {
+  const col = CLASS_PROJ_COLORS[selCls] || 0xffffff;
+  for (let i = 0; i < 7; i++) {
+    const ang = Math.random()*Math.PI*2;
+    const spd = 1.5+Math.random()*2.5;
+    const geo = new THREE.SphereGeometry(0.06+Math.random()*0.06, 4, 3);
+    const mat = new THREE.MeshBasicMaterial({color:col, transparent:true, depthWrite:false});
+    const p = new THREE.Mesh(geo, mat);
+    p.position.set(ex, 0.5+Math.random()*0.5, ez);
+    p.userData.vx=Math.cos(ang)*spd; p.userData.vy=1.0+Math.random()*2.0; p.userData.vz=Math.sin(ang)*spd;
+    fxGroup.add(p);
+    slashFXList.push({mesh:p, life:0.38, maxLife:0.38, isParticle:true});
+  }
+  // Class-specific hit mark
+  if (selCls==='berserker'||selCls==='conan') {
+    for (let a of [0.4,-0.4]) {
+      const geo=new THREE.PlaneGeometry(0.9,0.07);
+      const mat=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:0.9,side:THREE.DoubleSide,depthWrite:false});
+      const m=new THREE.Mesh(geo,mat); m.rotation.x=-Math.PI/2; m.rotation.z=a; m.position.set(ex,0.22,ez);
+      fxGroup.add(m); slashFXList.push({mesh:m,life:0.2,maxLife:0.2});
+    }
+  } else if (selCls==='archmage'||selCls==='seeress') {
+    const geo=new THREE.RingGeometry(0.08,0.45,14);
+    const mat=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:0.85,side:THREE.DoubleSide,depthWrite:false});
+    const m=new THREE.Mesh(geo,mat); m.rotation.x=-Math.PI/2; m.position.set(ex,0.18,ez);
+    fxGroup.add(m); aoeFXList.push({mesh:m,life:0.38,maxLife:0.38,radius:0.45});
+  } else if (selCls==='flameSister') {
+    for (let i=0;i<4;i++) {
+      const ang=Math.random()*Math.PI*2;
+      const geo=new THREE.SphereGeometry(0.12+Math.random()*0.08,5,4);
+      const col2=[0xff4400,0xff8800,0xffcc00][Math.floor(Math.random()*3)];
+      const mat=new THREE.MeshBasicMaterial({color:col2,transparent:true,depthWrite:false});
+      const p=new THREE.Mesh(geo,mat);
+      p.position.set(ex+Math.cos(ang)*0.2,0.2+Math.random()*0.3,ez+Math.sin(ang)*0.2);
+      p.userData.vx=Math.cos(ang)*0.8; p.userData.vy=2.5+Math.random()*1.5; p.userData.vz=Math.sin(ang)*0.8;
+      fxGroup.add(p); slashFXList.push({mesh:p,life:0.45,maxLife:0.45,isParticle:true});
+    }
+  } else if (selCls==='warden') {
+    for (let i=0;i<4;i++) {
+      const ang=(i/4)*Math.PI*2+Math.random()*0.5;
+      const geo=new THREE.PlaneGeometry(0.55+Math.random()*0.25,0.07);
+      const mat=new THREE.MeshBasicMaterial({color:0xffcc44,transparent:true,opacity:0.85,side:THREE.DoubleSide,depthWrite:false});
+      const m=new THREE.Mesh(geo,mat); m.rotation.x=-Math.PI/2; m.rotation.z=ang; m.position.set(ex,0.18,ez);
+      fxGroup.add(m); slashFXList.push({mesh:m,life:0.3,maxLife:0.3});
+    }
+  } else if (selCls==='kinslayer'||selCls==='revenant') {
+    const geo=new THREE.PlaneGeometry(0.7,0.7);
+    const mat=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:0.55,side:THREE.DoubleSide,depthWrite:false});
+    const m=new THREE.Mesh(geo,mat); m.rotation.x=-Math.PI/2; m.position.set(ex,0.18,ez);
+    fxGroup.add(m); slashFXList.push({mesh:m,life:0.28,maxLife:0.28});
+  }
+}
+
 function spawnAutoProjectile(target, dmg, wDef) {
-  // Find the key for this wDef
   const key = Object.keys(WEAPON_DEFS).find(k => WEAPON_DEFS[k] === wDef) || '';
-  const col = weaponColor(key);
-  spawnMagicBolt(P.x, P.z, target, dmg, col, wDef);
+  const col = CLASS_PROJ_COLORS[selCls] || weaponColor(key);
+  triggerAttackFX(wDef);
+  // Enhanced bolt with inner white core
+  const orbGeo = new THREE.SphereGeometry(0.13, 7, 5);
+  const orbMat = new THREE.MeshBasicMaterial({color:0xffffff});
+  const orb = new THREE.Mesh(orbGeo, orbMat);
+  const glowGeo = new THREE.SphereGeometry(0.25, 7, 5);
+  const glowMat = new THREE.MeshBasicMaterial({color:col, transparent:true, opacity:0.5, depthWrite:false});
+  const glow = new THREE.Mesh(glowGeo, glowMat);
+  const g = new THREE.Group(); g.add(orb); g.add(glow);
+  g.position.set(P.x, 0.9, P.z);
+  fxGroup.add(g);
+  projectileList.push({mesh:g, target, dmg, speed:16, type:'bolt', color:col, life:3, pulseT:0, skillDef:wDef});
 }
 
 function weaponColor(key) {
@@ -1603,12 +1869,26 @@ function dealDmg(e, dmg, skillDef) {
     if (passives.stunnedDmg && (e.statuses.stun || e.statuses.freeze)) dmg = Math.round(dmg * (1 + passives.stunnedDmg));
   }
   e.hp -= dmg; e.hurtFlash = 3;
-  if (dmg > 0) spawnFloat('-'+dmg, e.x, e.z, 'enemy');
+  if (dmg > 0) {
+    spawnFloat('-'+dmg, e.x, e.z, 'enemy');
+    spawnImpactFX(e.x, e.z); // class-specific hit effect
+  }
   updateEnemyHpBar(e);
   // Apply skill status effect
   if (skillDef && skillDef.status) applyStatus(e, skillDef.status, skillDef.statusChance || 25);
   // Apply passive attack stun
   if (passives.atkStun && Math.random() * 100 < passives.atkStun) applyStatus(e, 'stun', 100);
+  // Chain lightning — arcs to a nearby enemy for 60% damage
+  if (passives.chainLightning && dmg > 0 && Math.random() < passives.chainLightning) {
+    const chainTargets = getNeighborsAt(e.x, e.z, 4.0).filter(o => o !== e && !o.dead);
+    if (chainTargets.length > 0) {
+      const ct = chainTargets[Math.floor(Math.random() * chainTargets.length)];
+      const chainDmg = Math.round(dmg * 0.6);
+      ct.hp -= chainDmg; ct.hurtFlash = 2;
+      spawnFloat('⚡'+chainDmg, ct.x, ct.z, 'special');
+      spawnImpactFX(ct.x, ct.z);
+    }
+  }
   // Lifesteal
   if (P && passives.lifesteal > 0 && dmg > 0) {
     const heal = Math.max(1, Math.round(dmg * passives.lifesteal));
@@ -1659,20 +1939,6 @@ function updateEnemyHpBar(e){
 }
 
 // ── STAT DISTRIBUTION SYSTEM ─────────────────────────────────────────────────
-const STAT_DEFS = [
-  { key:'STR',  icon:'⚔️', name:'Strength',     desc:'ATK +2 per point',           color:'#ff8866' },
-  { key:'VIT',  icon:'❤️', name:'Vitality',     desc:'Max HP +20 per point',        color:'#ff6677' },
-  { key:'INT',  icon:'🔮', name:'Intellect',    desc:'Max MP +15 per point',         color:'#6688ff' },
-  { key:'AGI',  icon:'💨', name:'Agility',      desc:'All weapon CDs −5% per point', color:'#ffee44' },
-  { key:'DEX',  icon:'🎯', name:'Dexterity',    desc:'Crit chance +2% per point',   color:'#88ffcc' },
-];
-const POINTS_PER_LEVEL = 5;
-let totalUnspentPoints = 0;   // accumulated, never auto-spent
-let statPending = { STR:0, VIT:0, INT:0, AGI:0, DEX:0 };
-let statPointsLeft = 0;
-let statPanelOpen = false;
-let pendingLevels = [];       // kept for compat, not actively used
-
 let pickQueue = [];  // queued level-up picks
 let pickPending = false;
 
@@ -1685,7 +1951,6 @@ function G_xp(amt) {
     P.xpNeeded = Math.round(P.xpNeeded * 1.20);
     P.maxHp += 15; P.hp = Math.min(P.hp + 15, P.maxHp);
     P.maxMp += 8;  P.mp = Math.min(P.mp + 8,  P.maxMp);
-    totalUnspentPoints += POINTS_PER_LEVEL;
     pickQueue.push(P.level);
     spawnFloat('LEVEL UP!', P.x, P.z, 'special');
     document.getElementById('pname').textContent = 'Aerin  Lv.' + P.level;
@@ -1708,8 +1973,8 @@ function G_xp(amt) {
 
 function showNextPick() {
   if (pickQueue.length === 0) return;
-  pickQueue.length = 0; // drain all queued levels into one pick
-  openPassivePick(P.level);
+  const lvl = pickQueue.shift(); // take ONE level from queue
+  openPassivePick(lvl);
 }
 
 function checkZoneProgression() {
@@ -1756,179 +2021,20 @@ function updateZoneHUD() {
 
 function onPortraitTap() {
   if (!P) return;
-  if (pickQueue.length > 0) {
-    showNextPick(); // open pick panel if pending picks
-  } else {
-    openStatPanel(); // otherwise open stat panel
-  }
+  if (pickQueue.length > 0) showNextPick();
 }
 
 function updatePointsBadge() {
   const badge = document.getElementById('pt-badge');
-  const total = (pickQueue.length > 0 ? pickQueue.length : 0) + (totalUnspentPoints > 0 ? 1 : 0);
-  if (total > 0 || pickQueue.length > 0) {
-    badge.textContent = pickQueue.length > 0 ? '⭐' + pickQueue.length : totalUnspentPoints;
+  if (pickQueue.length > 0) {
+    badge.textContent = '⭐' + pickQueue.length;
     badge.style.display = 'flex';
   } else {
     badge.style.display = 'none';
   }
 }
 
-function openStatPanel() {
-  if (!P) return;
-  statPanelOpen = true;
-  statPointsLeft = totalUnspentPoints;
-  statPending = { STR:0, VIT:0, INT:0, AGI:0, DEX:0 };
-
-  document.getElementById('sp-lvl').textContent = 'Lv.' + P.level + ' — Aerin';
-  document.getElementById('sp-pts').textContent = statPointsLeft;
-
-  // Current stat summary
-  const sr = document.getElementById('sp-statrow');
-  sr.innerHTML = `ATK <span>${P.atk}</span> &nbsp; HP <span>${P.maxHp}</span> &nbsp; MP <span>${P.maxMp}</span> &nbsp; SPD <span>${P.spd.toFixed(1)}</span> &nbsp; CRIT <span>${(P.critChance||5)}%</span>`;
-
-  // Build rows
-  const grid = document.getElementById('sp-grid');
-  grid.innerHTML = '';
-  for (const sd of STAT_DEFS) {
-    const row = document.createElement('div');
-    row.className = 'sp-row';
-    row.id = 'srow-' + sd.key;
-    row.innerHTML = `
-      <div class="sp-icon">${sd.icon}</div>
-      <div class="sp-info">
-        <div class="sp-name" style="color:${sd.color}">${sd.name}</div>
-        <div class="sp-desc">${sd.desc}</div>
-      </div>
-      <div class="sp-val" id="spv-${sd.key}">${P.stats[sd.key]||0}</div>
-      <div class="sp-btns">
-        <button class="sp-btn" id="spm-${sd.key}"
-          onpointerdown="startHold('${sd.key}',-1,this)" onpointerup="stopHold()" onpointerleave="stopHold()" disabled>−</button>
-        <span class="sp-preview" id="spp-${sd.key}"></span>
-        <button class="sp-btn plus" id="spp2-${sd.key}"
-          onpointerdown="startHold('${sd.key}',+1,this)" onpointerup="stopHold()" onpointerleave="stopHold()">+</button>
-      </div>`;
-    grid.appendChild(row);
-  }
-
-  updateStatPanel();
-  document.getElementById('statpanel').style.display = 'flex';
-}
-
-function closeStatPanel() {
-  // Points not spent are kept for later — reset pending only
-  statPending = { STR:0, VIT:0, INT:0, AGI:0, DEX:0 };
-  document.getElementById('statpanel').style.display = 'none';
-  statPanelOpen = false;
-}
-
-function adjustStat(key, delta) {
-  if (delta > 0 && statPointsLeft <= 0) return;
-  if (delta < 0 && statPending[key] <= 0) return;
-  statPending[key] += delta;
-  statPointsLeft -= delta;
-  updateStatPanel();
-}
-
-// ── LONG PRESS HOLD ACCELERATION ─────────────────────────────────────────────
-let holdTimer = null;
-let holdInterval = null;
-let holdTicks = 0;
-
-function startHold(key, delta, btn) {
-  // Immediate first tick
-  adjustStat(key, delta);
-  holdTicks = 0;
-  // After 400ms delay, start repeating
-  holdTimer = setTimeout(() => {
-    holdInterval = setInterval(() => {
-      holdTicks++;
-      // Accelerate: every 10 ticks go faster, every 30 ticks jump by 5
-      const amount = holdTicks > 30 ? 5 : holdTicks > 15 ? 2 : 1;
-      for (let i = 0; i < amount; i++) adjustStat(key, delta);
-    }, holdTicks > 30 ? 40 : holdTicks > 15 ? 60 : 80);
-  }, 380);
-}
-
-function stopHold() {
-  if (holdTimer)   { clearTimeout(holdTimer);   holdTimer = null; }
-  if (holdInterval){ clearInterval(holdInterval); holdInterval = null; }
-  holdTicks = 0;
-}
-
-function updateStatPanel() {
-  document.getElementById('sp-pts').textContent = statPointsLeft;
-  const spentThisSession = totalUnspentPoints - statPointsLeft;
-  const confirmBtn = document.getElementById('sp-confirm');
-  confirmBtn.disabled = spentThisSession <= 0;
-  confirmBtn.textContent = spentThisSession > 0 ? `APPLY (${spentThisSession} pts)` : 'APPLY';
-
-  for (const sd of STAT_DEFS) {
-    const base = P.stats[sd.key] || 0;
-    const added = statPending[sd.key];
-    const total = base + added;
-    document.getElementById('spv-'+sd.key).textContent = total;
-
-    const prev = document.getElementById('spp-'+sd.key);
-    if (added > 0) {
-      prev.textContent = '+' + getStatBonus(sd.key, added);
-      prev.style.color = '#66ff99';
-    } else {
-      prev.textContent = '';
-    }
-    document.getElementById('spm-'+sd.key).disabled = added <= 0;
-    document.getElementById('spp2-'+sd.key).disabled = statPointsLeft <= 0;
-    document.getElementById('srow-'+sd.key).style.borderColor =
-      added > 0 ? 'rgba(249,199,79,.5)' : 'rgba(255,255,255,.1)';
-    document.getElementById('srow-'+sd.key).style.background =
-      added > 0 ? 'rgba(249,199,79,.06)' : 'rgba(255,255,255,.05)';
-  }
-}
-
-function getStatBonus(key, pts) {
-  if (key==='STR')  return 'ATK+'  + (pts*2);
-  if (key==='VIT')  return 'HP+'   + (pts*20);
-  if (key==='INT')  return 'MP+'   + (pts*15);
-  if (key==='AGI')  return '−' + (pts*5) + '% weapon CD';
-  if (key==='DEX')  return 'CRIT+' + (pts*2) + '%';
-  return '';
-}
-
-function applyStats(pending) {
-  for (const sd of STAT_DEFS) {
-    const pts = pending[sd.key];
-    if (pts <= 0) continue;
-    P.stats[sd.key] = (P.stats[sd.key] || 0) + pts;
-    if (sd.key==='STR')  { P.atk += pts * 2; }
-    if (sd.key==='VIT')  { P.maxHp += pts * 20; P.hp = Math.min(P.hp + pts*20, P.maxHp); }
-    if (sd.key==='INT')  { P.maxMp += pts * 15; P.mp = Math.min(P.mp + pts*15, P.maxMp); }
-    if (sd.key==='AGI') {
-      // Reduce all weapon cooldowns by 5% per point (stacks multiplicatively)
-      const mult = Math.pow(0.95, pts);
-      for (let wi=0; wi<4; wi++) {
-        const wk = weaponSlots[wi];
-        if (wk && WEAPON_DEFS[wk]) WEAPON_DEFS[wk].cd = Math.max(0.12, WEAPON_DEFS[wk].cd * mult);
-      }
-      passives.atkSpd = (passives.atkSpd || 0) + pts * 0.05; // also affects ongoing CD calc
-    }
-    if (sd.key==='DEX')  { P.critChance = (P.critChance||5) + pts * 2; }
-  }
-}
-
-function confirmStats() {
-  const spent = Object.values(statPending).reduce((a,b)=>a+b,0);
-  if (spent <= 0) return;
-  applyStats(statPending);
-  totalUnspentPoints -= spent;
-  updatePointsBadge();
-  // Refresh panel in place so they can keep spending remaining points
-  openStatPanel();
-  setLog('Stats applied! ' + (totalUnspentPoints > 0 ? totalUnspentPoints + ' points remaining.' : 'All points spent!'), 2500);
-}
-
 // ── CANVAS CLICK (target) ─────────────────────────────────────────────────────
-const raycaster=new THREE.Raycaster();
-const mouse=new THREE.Vector2();
 function onCanvasClick(e){
   if(!P)return;
   const r=gc.getBoundingClientRect();
@@ -1936,13 +2042,11 @@ function onCanvasClick(e){
   mouse.x=((e.clientX-r.left)/r.width)*2-1;
   mouse.y=-((e.clientY-r.top)/r.height)*2+1;
   raycaster.setFromCamera(mouse,camera);
-  // Check against enemy meshes
   const meshes=enemies.filter(e=>!e.dead).map(e=>e.mesh);
   const hits=raycaster.intersectObjects(meshes,true);
   if(hits.length>0){
     let obj=hits[0].object;
     while(obj.parent&&!obj.userData.enemyRef)obj=obj.parent;
-    // find enemy by mesh
     const en=enemies.find(e=>e.mesh===obj||e.mesh===obj.parent||isChildOf(obj,e.mesh));
     if(en&&!en.dead){autoTarget=en;updateTargetHUD();}
   }
@@ -2189,16 +2293,36 @@ function update(dt){
 }
 
 // ── UPDATE SCENE OBJECTS ──────────────────────────────────────────────────────
+
 function updateScene(dt){
   if(!P||!playerGroup)return;
 
-  // Player position & bob
-  const bob=P.moving?Math.sin(P.bobAngle)*.04:0;
-  playerGroup.position.set(P.x,bob,P.z);
-  playerGroup.rotation.y=P.facing;
-  // Hurt flash
-  const flashCol=P.hurtFlash>0?new THREE.Color(2,0.5,0.5):new THREE.Color(1,1,1);
-  playerGroup.traverse(c=>{if(c.isMesh&&c.material&&c.material.color&&c.name!=='playerRing')c.material.emissive&&c.material.emissive.set(P.hurtFlash>0?0x441100:0x000000);});
+  playerGroup.position.set(P.x, 0, P.z);
+
+  // Facing rotation
+  if (P.moving) playerGroup.rotation.y = P.facing;
+
+  // Walk bob — applied to whole group Y, not accumulated
+  const bob = P.moving ? Math.abs(Math.sin(P.bobAngle)) * 0.05 : 0;
+  playerGroup.position.y = bob;
+
+  // Hurt flash — tint all meshes red
+  const hurtHex = P.hurtFlash > 0 ? 0x441100 : 0x000000;
+  playerGroup.traverse(c => {
+    if (c.isMesh && c.material && c.material.emissive && c.name !== 'playerRing') {
+      c.material.emissive.setHex(hurtHex);
+    }
+  });
+
+  // Attack flash — brief yellow emissive pop
+  if (spriteAttackFlash > 0) {
+    const t = spriteAttackFlash / 0.18;
+    playerGroup.traverse(c => {
+      if (c.isMesh && c.material && c.material.emissive && c.name !== 'playerRing') {
+        c.material.emissive.setRGB(t * 0.4, t * 0.3, 0);
+      }
+    });
+  }
 
   // Camera follows player (isometric offset stays constant)
   const cx=P.x+20, cy=20, cz=P.z+20;
@@ -2242,14 +2366,25 @@ function updateScene(dt){
     }
   }
 
-  // Slash FX
+  // Slash FX (includes particles with physics)
   for(let i=slashFXList.length-1;i>=0;i--){
     const f=slashFXList[i];
     f.life-=dt;
     if(f.life<=0){fxGroup.remove(f.mesh);slashFXList.splice(i,1);continue;}
     const t=f.life/f.maxLife;
-    f.mesh.material.opacity=t*.9;
-    f.mesh.scale.setScalar(1+(1-t)*1.5);
+    if (f.isParticle) {
+      // Gravity + velocity
+      f.mesh.userData.vy = (f.mesh.userData.vy || 0) - 6 * dt;
+      f.mesh.position.x += (f.mesh.userData.vx || 0) * dt;
+      f.mesh.position.y += f.mesh.userData.vy * dt;
+      f.mesh.position.z += (f.mesh.userData.vz || 0) * dt;
+      if (f.mesh.position.y < 0.05) f.mesh.position.y = 0.05;
+      f.mesh.material.opacity = t * 0.9;
+      f.mesh.scale.setScalar(t * 0.9 + 0.1);
+    } else {
+      f.mesh.material.opacity = t * 0.9;
+      if (!f.isMuzzle) f.mesh.scale.setScalar(1 + (1-t) * 1.2);
+    }
   }
   // AoE FX
   for(let i=aoeFXList.length-1;i>=0;i--){
@@ -2259,6 +2394,9 @@ function updateScene(dt){
     f.mesh.material.opacity=(f.life/f.maxLife)*.8;
     f.mesh.scale.setScalar(1+(1-f.life/f.maxLife)*.4);
   }
+
+  // Sprite attack flash decay
+  if (spriteAttackFlash > 0) spriteAttackFlash = Math.max(0, spriteAttackFlash - dt);
 
   // ── PROJECTILE UPDATE ──────────────────────────────────────────────────────
   for(let i=projectileList.length-1;i>=0;i--){
