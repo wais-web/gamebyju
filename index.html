@@ -52,17 +52,18 @@ html,body{width:100%;height:100%;background:#0a0e1a;display:flex;align-items:cen
 #jring{position:absolute;inset:10px;border-radius:50%;border:1px solid rgba(255,255,255,.08)}
 #jstick{position:absolute;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.4);top:50%;left:50%;transform:translate(-50%,-50%)}
 #sarea{position:absolute;bottom:22px;right:14px;width:158px;height:158px;pointer-events:all}
-.sk{position:absolute;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:2.5px solid rgba(255,255,255,.28);background:rgba(0,0,0,.45);pointer-events:all;transition:transform .08s,filter .08s}
-.sk:active{transform:scale(.88)!important;filter:brightness(1.5)}
+/* WEAPON DISPLAY (auto-fire, no tap) */
+#sarea{position:absolute;bottom:22px;right:14px;width:158px;height:158px;pointer-events:none}
+.sk{position:absolute;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2.5px solid rgba(255,255,255,.28);background:rgba(0,0,0,.45)}
 .sk .se{font-size:20px;line-height:1;pointer-events:none}
-.sk .sl{font-size:6.5px;color:rgba(255,255,255,.75);font-weight:800;letter-spacing:.3px;margin-top:1px;pointer-events:none}
+.sk .sl{font-size:6px;color:rgba(255,255,255,.75);font-weight:800;letter-spacing:.3px;margin-top:1px;pointer-events:none}
 .cdcvs{position:absolute;inset:-2px;border-radius:50%;pointer-events:none}
 #sk0{width:54px;height:54px;bottom:2px;right:2px;border-color:rgba(255,180,60,.6);background:rgba(160,70,10,.5)}
 #sk1{width:47px;height:47px;bottom:58px;right:58px;border-color:rgba(100,180,255,.55);background:rgba(20,55,130,.5)}
 #sk2{width:47px;height:47px;bottom:60px;right:5px;border-color:rgba(255,100,200,.5);background:rgba(110,15,75,.5)}
 #sk3{width:42px;height:42px;bottom:6px;right:60px;border-color:rgba(90,220,110,.5);background:rgba(15,90,30,.5)}
-#skauto{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,220,50,.45);background:rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:8px;color:rgba(255,220,50,.75);font-weight:800;cursor:pointer;pointer-events:all;line-height:1.2}
-#skauto.on{border-color:#f9c74f;background:rgba(160,100,0,.5);color:#f9c74f}
+/* Wave timer HUD */
+#wavehud{position:absolute;top:108px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.55);border:1px solid rgba(255,220,80,.35);border-radius:8px;padding:3px 10px;font-size:9px;color:rgba(255,220,80,.9);font-weight:800;letter-spacing:.5px;pointer-events:none;white-space:nowrap}
 
 /* PASSIVE UPGRADE SHOP */
 #shoppanel{position:absolute;inset:0;background:rgba(4,2,12,.92);display:none;flex-direction:column;align-items:center;z-index:160;border-radius:16px;pointer-events:all;overflow:hidden}
@@ -95,6 +96,21 @@ html,body{width:100%;height:100%;background:#0a0e1a;display:flex;align-items:cen
 .ab-pip{background:rgba(0,0,0,.65);border:1.5px solid rgba(255,160,50,.5);border-radius:7px;padding:3px 7px;font-size:8px;color:rgba(255,200,80,.9);font-weight:800;letter-spacing:.3px;white-space:nowrap}
 .ab-pip.locked{border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.3)}
 .ab-pip.active{border-color:#f9c74f;background:rgba(160,80,0,.5);color:#f9c74f;box-shadow:0 0 6px rgba(249,199,79,.3)}
+/* PASSIVE PICK PANEL */
+#pickpanel{position:absolute;inset:0;background:rgba(4,2,12,.93);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:170;border-radius:16px;pointer-events:all}
+#pickpanel .pk-title{font-size:10px;color:#888;letter-spacing:3px;font-weight:700;margin-bottom:4px}
+#pickpanel .pk-lvl{font-size:20px;color:#f9c74f;font-weight:800;margin-bottom:12px;text-shadow:0 0 20px rgba(249,199,79,.5)}
+.pk-grid{display:flex;flex-direction:column;gap:8px;width:320px}
+.pk-card{background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.12);border-radius:12px;padding:12px 14px;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:10px}
+.pk-card:hover{border-color:#f9c74f;background:rgba(249,199,79,.08);transform:scale(1.02)}
+.pk-card:active{transform:scale(.97)}
+.pk-icon{font-size:26px;flex-shrink:0;line-height:1;margin-top:2px}
+.pk-text{flex:1}
+.pk-name{font-size:12px;color:#f0e0ff;font-weight:800;line-height:1;margin-bottom:3px}
+.pk-eff{font-size:9px;color:#c8b8f0;line-height:1.4}
+.pk-src{font-size:8px;color:#6655aa;margin-top:2px;font-style:italic}
+.pk-skip{font-size:10px;color:rgba(255,255,255,.3);margin-top:10px;cursor:pointer;text-decoration:underline}
+.pk-skip:hover{color:rgba(255,255,255,.6)}
 .fd{position:absolute;font-size:14px;font-weight:800;pointer-events:none;text-shadow:0 1px 3px #000;white-space:nowrap;transition:transform .9s ease-out,opacity .9s}
 .fd.enemy{color:#ffe566}.fd.player{color:#ff7777}.fd.heal{color:#7fff9a}.fd.special{color:#ddb8ff;font-size:16px}
 
@@ -149,12 +165,12 @@ html,body{width:100%;height:100%;background:#0a0e1a;display:flex;align-items:cen
 .ovlogo{font-size:11px;color:#888;letter-spacing:4px;font-weight:700;margin-bottom:6px}
 .ovtitle{font-size:24px;color:#f9c74f;font-weight:800;letter-spacing:1px;text-align:center;line-height:1.15;margin-bottom:2px;text-shadow:0 0 30px rgba(249,199,79,.5)}
 .ovsub{font-size:10px;color:#8870b0;margin-bottom:18px;letter-spacing:2px}
-.cgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:16px;width:270px}
-.cc{background:rgba(255,255,255,.04);border:2px solid rgba(255,255,255,.1);border-radius:12px;padding:11px 6px;cursor:pointer;text-align:center;transition:all .15s}
+.cgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;width:310px;max-height:420px;overflow-y:auto;padding:2px}
+.cc{background:rgba(255,255,255,.04);border:2px solid rgba(255,255,255,.1);border-radius:12px;padding:9px 6px;cursor:pointer;text-align:center;transition:all .15s}
 .cc:hover,.cc.sel{border-color:#f9c74f;background:rgba(249,199,79,.1)}
-.cc .ci{font-size:30px;margin-bottom:3px}
+.cc .ci{font-size:26px;margin-bottom:2px}
 .cc .cn{font-size:11px;color:#f0e0ff;font-weight:800}
-.cc .cd{font-size:8px;color:#9d8bb0;margin-top:2px;line-height:1.4}
+.cc .cd{font-size:7.5px;color:#9d8bb0;margin-top:2px;line-height:1.4}
 .enterbtn{background:linear-gradient(135deg,#f9c74f,#f8961e);color:#1a0a00;font-size:13px;font-weight:800;padding:11px 38px;border-radius:30px;border:none;cursor:pointer;letter-spacing:1px;box-shadow:0 4px 20px rgba(249,199,79,.4);transition:transform .1s}
 .enterbtn:active{transform:scale(.96)}
 </style>
@@ -165,7 +181,7 @@ html,body{width:100%;height:100%;background:#0a0e1a;display:flex;align-items:cen
   <div id="ui">
     <div id="hud-top">
       <div id="pinfo">
-        <div id="pport-wrap" onclick="openStatPanel()">
+        <div id="pport-wrap" onclick="onPortraitTap()">
           <div id="pport">⚔️</div>
           <div id="pt-badge">0</div>
         </div>
@@ -179,28 +195,30 @@ html,body{width:100%;height:100%;background:#0a0e1a;display:flex;align-items:cen
     </div>
     <div id="xpwrap"><div id="xpbg"><div id="xpfill" style="width:0%"></div></div><div id="xplabel">EXP 0/100 · Gold 0 · Kills 0</div></div>
     <div id="zonehud"><span id="zonename">🌿 Verdant Fields</span><span id="zonenext">Boss in 20 kills</span></div>
+    <div id="wavehud">⚔ Wave 1 · 0:30</div>
     <div id="goldbtn" onclick="openShop()">💰 UPGRADES</div>
     <div id="bosshud"><div id="bossname">BOSS</div><div id="bosshpbg"><div id="bosshpfill" style="width:100%"></div></div></div>
     <div id="bossalert"><div class="ba-title">⚠ BOSS APPEARS ⚠</div><div class="ba-name" id="ba-name"></div></div>
     <div id="thud"><div id="tname"></div><div id="thprow"><div id="thpbg"><div id="thpfill" style="width:100%"></div></div><span id="thptxt"></span></div></div>
     <div id="logwrap"><div id="logmsg"></div></div>
-    <div id="archerpanel">
-      <div class="ab-pip locked" id="ab-multishot">🏹 Multishot</div>
-      <div class="ab-pip locked" id="ab-ricochet">💥 Ricochet</div>
-      <div class="ab-pip locked" id="ab-frontarrow">⬆ Front Arrow+1</div>
-      <div class="ab-pip locked" id="ab-piercing">🔱 Piercing Shot</div>
-    </div>
     <div id="ctrl">
       <div id="jarea"><div id="jbase"><div id="jring"></div><div id="jstick"></div></div></div>
       <div id="sarea">
-        <div class="sk" id="sk0" onpointerdown="useSkill(0)"><div class="se">⚔️</div><div class="sl" id="sl0">ATTACK</div><canvas class="cdcvs" id="cdc0" width="58" height="58"></canvas></div>
-        <div class="sk" id="sk1" onpointerdown="useSkill(1)"><div class="se" id="se1">🌀</div><div class="sl" id="sl1">SKILL</div><canvas class="cdcvs" id="cdc1" width="51" height="51"></canvas></div>
-        <div class="sk" id="sk2" onpointerdown="useSkill(2)"><div class="se" id="se2">🔥</div><div class="sl" id="sl2">SKILL</div><canvas class="cdcvs" id="cdc2" width="51" height="51"></canvas></div>
-        <div class="sk" id="sk3" onpointerdown="useSkill(3)"><div class="se" id="se3">💊</div><div class="sl" id="sl3">POTION</div><canvas class="cdcvs" id="cdc3" width="46" height="46"></canvas></div>
-        <div id="skauto" onpointerdown="toggleAuto()">⚡<br>AUTO</div>
+        <div class="sk" id="sk0"><div class="se" id="se0">⚔️</div><div class="sl" id="sl0">WEAPON</div><canvas class="cdcvs" id="cdc0" width="58" height="58"></canvas></div>
+        <div class="sk" id="sk1"><div class="se" id="se1">🌀</div><div class="sl" id="sl1">SKILL</div><canvas class="cdcvs" id="cdc1" width="51" height="51"></canvas></div>
+        <div class="sk" id="sk2"><div class="se" id="se2">🔥</div><div class="sl" id="sl2">SKILL</div><canvas class="cdcvs" id="cdc2" width="51" height="51"></canvas></div>
+        <div class="sk" id="sk3"><div class="se" id="se3">💊</div><div class="sl" id="sl3">PASSIVE</div><canvas class="cdcvs" id="cdc3" width="46" height="46"></canvas></div>
       </div>
     </div>
   </div>
+  <!-- PASSIVE PICK PANEL (rogue-like pick on level up) -->
+  <div id="pickpanel">
+    <div class="pk-title">✦ LEVEL UP ✦</div>
+    <div class="pk-lvl" id="pk-lvl">Level 2 — Choose a Passive</div>
+    <div class="pk-grid" id="pk-grid"></div>
+    <div class="pk-skip" onclick="skipPassivePick()">Skip for now</div>
+  </div>
+
   <!-- STAT DISTRIBUTION PANEL -->
   <div id="statpanel">
     <div class="sp-title">✦ CHARACTER STATS ✦</div>
@@ -229,10 +247,14 @@ html,body{width:100%;height:100%;background:#0a0e1a;display:flex;align-items:cen
     <div class="ovtitle">Choose Your<br>Class</div>
     <div class="ovsub">3D MOBILE MMORPG</div>
     <div class="cgrid">
-      <div class="cc sel" id="cc-swordsman" onclick="pickCls('swordsman',this)"><div class="ci">⚔️</div><div class="cn">Swordsman</div><div class="cd">Tank · Melee<br>ATK★★★ DEF★★★★</div></div>
-      <div class="cc" id="cc-wizard" onclick="pickCls('wizard',this)"><div class="ci">🔮</div><div class="cn">Wizard</div><div class="cd">AoE Magic<br>ATK★★★★★ DEF★★</div></div>
-      <div class="cc" id="cc-archer" onclick="pickCls('archer',this)"><div class="ci">🏹</div><div class="cn">Archer</div><div class="cd">Ranged · Fast<br>ATK★★★★ DEF★★★</div></div>
-      <div class="cc" id="cc-cleric" onclick="pickCls('cleric',this)"><div class="ci">✨</div><div class="cn">Cleric</div><div class="cd">Heal · Holy<br>ATK★★★ DEF★★★★</div></div>
+      <div class="cc sel" id="cc-berserker"   onclick="pickCls('berserker',this)"><div class="ci">🪓</div><div class="cn">Berserker</div><div class="cd">Rage · Bleed<br>ATK★★★★ DEF★★★</div></div>
+      <div class="cc" id="cc-seeress"         onclick="pickCls('seeress',this)"><div class="ci">🔮</div><div class="cn">Seeress</div><div class="cd">Curse · Freeze<br>ATK★★★★★ DEF★★</div></div>
+      <div class="cc" id="cc-revenant"        onclick="pickCls('revenant',this)"><div class="ci">🏹</div><div class="cn">Revenant</div><div class="cd">Ghost · Arrows<br>ATK★★★★ DEF★★★</div></div>
+      <div class="cc" id="cc-flameSister"     onclick="pickCls('flameSister',this)"><div class="ci">🗡️</div><div class="cn">Flame Sister</div><div class="cd">Burn · Poison<br>ATK★★★★★ DEF★★</div></div>
+      <div class="cc" id="cc-warden"          onclick="pickCls('warden',this)"><div class="ci">🔨</div><div class="cn">Warden</div><div class="cd">Stun · Block<br>ATK★★★ DEF★★★★★</div></div>
+      <div class="cc" id="cc-kinslayer"       onclick="pickCls('kinslayer',this)"><div class="ci">⚔️</div><div class="cn">Kinslayer</div><div class="cd">Shadow · Curse<br>ATK★★★★ DEF★★★</div></div>
+      <div class="cc" id="cc-archmage"        onclick="pickCls('archmage',this)"><div class="ci">🌟</div><div class="cn">Archmage</div><div class="cd">Elements · AoE<br>ATK★★★★★ DEF★</div></div>
+      <div class="cc" id="cc-conan"           onclick="pickCls('conan',this)"><div class="ci">👑</div><div class="cn">Conan</div><div class="cd">Triumph · Sword<br>ATK★★★★ DEF★★★★</div></div>
     </div>
     <button class="enterbtn" onclick="startGame()">⚔ ENTER WORLD</button>
   </div>
@@ -276,8 +298,8 @@ scene.add(ambientLight);
 const sunLight=new THREE.DirectionalLight(0xfff5e0,1.2);
 sunLight.position.set(15,25,10);
 sunLight.castShadow=true;
-sunLight.shadow.mapSize.width=2048;
-sunLight.shadow.mapSize.height=2048;
+sunLight.shadow.mapSize.width=512;
+sunLight.shadow.mapSize.height=512;
 sunLight.shadow.camera.near=0.5;
 sunLight.shadow.camera.far=80;
 sunLight.shadow.camera.left=-40;
@@ -317,23 +339,47 @@ const MAPSZ=60;
 const TMAP=[];
 for(let z=0;z<MAPSZ;z++){TMAP[z]=[];for(let x=0;x<MAPSZ;x++){const r=Math.random();TMAP[z][x]=r<.04?'stone':r<.08?'dirt':r<.16?'grassLight':'grass';}}
 
-// Build tile meshes (merged into a few big geometries per type)
-const tileGeo=new THREE.BoxGeometry(1,0.2,1);
-const tileGroup=new THREE.Group();
+// ── BUILD GROUND using merged geometry (one draw call per tile type) ──────────
+const tileGroup = new THREE.Group();
 scene.add(tileGroup);
-for(let z=0;z<MAPSZ;z++){for(let x=0;x<MAPSZ;x++){
-  const t=TMAP[z][x];
-  const m=new THREE.Mesh(tileGeo,MAT[t]);
-  m.position.set(x,0,z);
-  m.receiveShadow=true;
-  tileGroup.add(m);
-}}
 
-// Decorations
-const decoGroup=new THREE.Group();
+// Collect positions per tile type, then merge
+const tilePositions = { grass:[], grassLight:[], dirt:[], stone:[] };
+for(let z=0;z<MAPSZ;z++) for(let x=0;x<MAPSZ;x++) tilePositions[TMAP[z][x]].push([x,z]);
+
+const tileBaseGeo = new THREE.BoxGeometry(1,0.18,1);
+for(const [type, positions] of Object.entries(tilePositions)){
+  if(!positions.length) continue;
+  const merged = new THREE.BufferGeometry();
+  const posArr=[], normArr=[], uvArr=[], idxArr=[];
+  const tgPos = tileBaseGeo.attributes.position;
+  const tgNorm = tileBaseGeo.attributes.normal;
+  const tgUV = tileBaseGeo.attributes.uv;
+  const tgIdx = tileBaseGeo.index;
+  const vCount = tgPos.count;
+  for(const [x,z] of positions){
+    const base = posArr.length/3;
+    for(let v=0;v<vCount;v++){
+      posArr.push(tgPos.getX(v)+x, tgPos.getY(v), tgPos.getZ(v)+z);
+      normArr.push(tgNorm.getX(v), tgNorm.getY(v), tgNorm.getZ(v));
+      uvArr.push(tgUV.getX(v), tgUV.getY(v));
+    }
+    for(let i=0;i<tgIdx.count;i++) idxArr.push(tgIdx.getX(i)+base);
+  }
+  merged.setAttribute('position', new THREE.Float32BufferAttribute(posArr,3));
+  merged.setAttribute('normal',   new THREE.Float32BufferAttribute(normArr,3));
+  merged.setAttribute('uv',       new THREE.Float32BufferAttribute(uvArr,2));
+  merged.setIndex(idxArr);
+  const mesh = new THREE.Mesh(merged, MAT[type]);
+  mesh.receiveShadow = true;
+  tileGroup.add(mesh);
+}
+
+// ── DECORATIONS (simple instanced approach) ───────────────────────────────────
+const decoGroup = new THREE.Group();
 scene.add(decoGroup);
 const placed=new Set();
-for(let i=0;i<180;i++){
+for(let i=0;i<80;i++){
   let dx=2+Math.floor(Math.random()*(MAPSZ-4));
   let dz=2+Math.floor(Math.random()*(MAPSZ-4));
   const k=dx+','+dz;
@@ -376,39 +422,85 @@ for(let i=0;i<180;i++){
 }
 
 // ── CLASS DEFINITIONS ────────────────────────────────────────────────────────
+// ── WEAPON DEFINITIONS (auto-fire) ───────────────────────────────────────────
+// Each weapon fires automatically. Types: 'projectile','aoe','orbit','nova','beam','spread'
+const WEAPON_DEFS = {
+  // Berserker
+  assault:      {em:'⚔️',lbl:'Assault',     cd:1.0, type:'projectile', dmgMult:1.2, range:4.0, speed:20, status:null},
+  axeThrow:     {em:'🪓',lbl:'Axe Throw',    cd:1.5, type:'spread',     dmgMult:1.4, range:8.0, count:3,  status:'bleed',  statusChance:20},
+  cuttingEdge:  {em:'🌀',lbl:'Cutting Edge', cd:4.0, type:'aoe',        dmgMult:2.0, range:3.0, status:'bleed',  statusChance:30},
+  // Seeress
+  mindBlast:    {em:'🌑',lbl:'Mind Blast',   cd:1.2, type:'projectile', dmgMult:1.3, range:7.0, speed:16, status:'slow',   statusChance:40},
+  temporalTrap: {em:'❄️',lbl:'Temp Trap',    cd:6.0, type:'aoe',        dmgMult:1.8, range:4.5, status:'freeze', statusChance:100},
+  briarThorns:  {em:'🌿',lbl:'Briar Thorns', cd:3.5, type:'nova',       dmgMult:1.5, range:3.5, status:'root',   statusChance:35},
+  // Revenant
+  focusFire:    {em:'🏹',lbl:'Focus Fire',   cd:0.7, type:'projectile', dmgMult:1.0, range:9.0, speed:22, status:'bleed',  statusChance:15},
+  skullShot:    {em:'💀',lbl:'Skull Shot',   cd:3.5, type:'projectile', dmgMult:2.5, range:6.0, speed:14, status:'stun',   statusChance:60},
+  grapplingWeb: {em:'🕸️',lbl:'Web',          cd:5.0, type:'aoe',        dmgMult:1.3, range:4.0, status:'root',   statusChance:75},
+  // Flame Sister
+  flamingRay:   {em:'🔥',lbl:'Flaming Ray',  cd:1.0, type:'beam',       dmgMult:1.4, range:5.5, status:'burn',   statusChance:20},
+  shrapnelPot:  {em:'💣',lbl:'Shrapnel',     cd:4.0, type:'aoe',        dmgMult:2.2, range:3.5, status:'poison', statusChance:50},
+  danceDaggers: {em:'🗡️',lbl:'Daggers',      cd:2.0, type:'spread',     dmgMult:1.2, range:4.0, count:5,  status:'bleed',  statusChance:15},
+  // Warden
+  ironFist:     {em:'🔨',lbl:'Iron Fist',    cd:1.5, type:'aoe',        dmgMult:1.8, range:2.5, status:'stun',   statusChance:15},
+  seismicShock: {em:'⚙️',lbl:'Seismic',      cd:5.0, type:'nova',       dmgMult:2.0, range:4.5, status:'slow',   statusChance:40},
+  shieldwall:   {em:'🛡️',lbl:'Shieldwall',   cd:0.8, type:'orbit',      dmgMult:0.8, range:2.0, status:'stun',   statusChance:10},
+  // Kinslayer
+  fallenValkyrie:{em:'⚔️',lbl:'Valkyrie',   cd:2.5, type:'spread',     dmgMult:1.6, range:5.0, count:3,  status:'slow',   statusChance:50},
+  shadowImages: {em:'🌑',lbl:'Shadows',      cd:4.5, type:'nova',       dmgMult:2.0, range:3.5, status:'curse',  statusChance:30},
+  javelins:     {em:'🔱',lbl:'Javelins',     cd:1.2, type:'spread',     dmgMult:1.1, range:7.0, count:4,  status:'bleed',  statusChance:20},
+  // Archmage
+  magicBall:    {em:'🔮',lbl:'Magic Ball',   cd:1.2, type:'projectile', dmgMult:1.5, range:5.5, speed:14, status:'burn',   statusChance:24},
+  magicPulse:   {em:'⚡',lbl:'Magic Pulse',  cd:0.8, type:'beam',       dmgMult:1.0, range:8.0, status:'shock',  statusChance:20},
+  magicNova:    {em:'🌀',lbl:'Magic Nova',   cd:6.0, type:'nova',       dmgMult:2.8, range:6.0, status:'freeze', statusChance:36},
+  // Conan
+  flurryBlades: {em:'🌀',lbl:'Flurry',       cd:0.6, type:'aoe',        dmgMult:1.0, range:2.5, status:'bleed',  statusChance:15},
+  roarLion:     {em:'🦁',lbl:'Roar',         cd:5.0, type:'nova',       dmgMult:1.8, range:5.5, status:'fear',   statusChance:20},
+  cromRampage:  {em:'⚔️',lbl:'Rampage',      cd:1.8, type:'projectile', dmgMult:2.0, range:4.0, speed:18, status:'bleed',  statusChance:25},
+};
+
+// Default loadout per class (weapon keys, max 4 slots)
+const CLASS_LOADOUTS = {
+  berserker:   ['assault',      'axeThrow',     'cuttingEdge',  null],
+  seeress:     ['mindBlast',    'temporalTrap', 'briarThorns',  null],
+  revenant:    ['focusFire',    'skullShot',    'grapplingWeb', null],
+  flameSister: ['flamingRay',   'shrapnelPot',  'danceDaggers', null],
+  warden:      ['ironFist',     'seismicShock', 'shieldwall',   null],
+  kinslayer:   ['fallenValkyrie','shadowImages','javelins',      null],
+  archmage:    ['magicBall',    'magicPulse',   'magicNova',    null],
+  conan:       ['flurryBlades', 'roarLion',     'cromRampage',  null],
+};
+
+// Active weapon slots — keys into WEAPON_DEFS (or null)
+let weaponSlots = [null, null, null, null];
+// Cooldown timers per slot
+let weaponCDs  = [0, 0, 0, 0];
+
 const CLASSES={
-  swordsman:{name:'Swordsman',port:'🧝',bodyCol:0x7030a0,legCol:0x3030a0,hp:320,mp:60,atk:24,def:14,spd:6.0,
-    skills:[{em:'🌀',lbl:'SPIN',  mp:10,mult:2.2,aoe:true, range:3.5,cd:4.5},
-            {em:'🔥',lbl:'FLAME', mp:18,mult:2.8,aoe:false,range:2.5,cd:7.0},
-            {em:'💊',lbl:'POTION',mp:0, heal:.30,               cd:10}]},
-  wizard:   {name:'Wizard',   port:'🧙',bodyCol:0x2040cc,legCol:0x102088,hp:200,mp:130,atk:36,def:5,spd:5.0,
-    skills:[{em:'⚡',lbl:'BOLT',  mp:14,mult:2.5,aoe:false,range:5.0,cd:4.0},
-            {em:'🌊',lbl:'TIDE',  mp:24,mult:3.3,aoe:true, range:4.0,cd:8.0},
-            {em:'💊',lbl:'POTION',mp:0, heal:.30,               cd:10}]},
-  archer:   {name:'Archer',   port:'🧚',bodyCol:0xaa2020,legCol:0x701010,hp:260,mp:85,atk:28,def:8,spd:7.0,
-    skills:[{em:'💨',lbl:'GALE',  mp:10,mult:2.1,aoe:false,range:6.0,cd:4.0},
-            {em:'🎯',lbl:'SNIPE', mp:16,mult:3.2,aoe:false,range:7.0,cd:6.5},
-            {em:'💊',lbl:'POTION',mp:0, heal:.30,               cd:10}]},
-  cleric:   {name:'Cleric',   port:'🧝',bodyCol:0x208040,legCol:0x105030,hp:290,mp:110,atk:22,def:12,spd:5.5,
-    skills:[{em:'☀️',lbl:'SMITE', mp:12,mult:2.2,aoe:false,range:3.0,cd:4.5},
-            {em:'💛',lbl:'HEAL',  mp:22,heal:.45,                   cd:8.0},
-            {em:'🌟',lbl:'AURA',  mp:16,mult:1.8,aoe:true, range:3.5,cd:6.0}]},
+  berserker:  {name:'Berserker',  port:'🪓', bodyCol:0x8b1a1a, legCol:0x5a1010, hp:380,mp:50, atk:30,def:10,spd:6.5},
+  seeress:    {name:'Seeress',    port:'🔮', bodyCol:0x4a2080, legCol:0x2a1060, hp:220,mp:140,atk:34,def:6, spd:5.2},
+  revenant:   {name:'Revenant',   port:'🏹', bodyCol:0x1a3a5a, legCol:0x0f2040, hp:290,mp:90, atk:26,def:9, spd:7.2},
+  flameSister:{name:'Flame Sister',port:'🗡️',bodyCol:0xcc3300, legCol:0x881a00, hp:250,mp:100,atk:32,def:7, spd:7.0},
+  warden:     {name:'Warden',     port:'🔨', bodyCol:0x8a6020, legCol:0x604010, hp:360,mp:70, atk:22,def:18,spd:5.5},
+  kinslayer:  {name:'Kinslayer',  port:'⚔️', bodyCol:0x1a1a3a, legCol:0x0f0f28, hp:300,mp:80, atk:28,def:11,spd:6.8},
+  archmage:   {name:'Archmage',   port:'🌟', bodyCol:0x003366, legCol:0x001a44, hp:200,mp:160,atk:38,def:5, spd:5.0},
+  conan:      {name:'Conan',      port:'👑', bodyCol:0x7a4a10, legCol:0x503008, hp:340,mp:60, atk:26,def:14,spd:6.2},
 };
 
 // ── ZONE / FLOOR DEFINITIONS ─────────────────────────────────────────────────
-// minKills: total kills needed to enter zone
-// bossKills: kills within this zone to trigger the zone boss
+// minKills: total kills to enter this zone
+// bossKills: kills within zone before boss spawns
 const ZONES = [
-  { name:'🌿 Verdant Fields',   minKills:0,   bossKills:20,  skyCol:0x87ceeb, fogCol:0xb8e4f0, groundCol:0x6db84a, ambCol:0xffeedd },
-  { name:'🌲 Darkwood Forest',  minKills:30,  bossKills:35,  skyCol:0x4a6e3a, fogCol:0x3a5a2a, groundCol:0x3a6a28, ambCol:0xccddbb },
-  { name:'🏔 Frostpeak Pass',   minKills:75,  bossKills:45,  skyCol:0xaaccee, fogCol:0xc8ddf0, groundCol:0xc8ddf8, ambCol:0xddeeff },
-  { name:'🌋 Volcanic Crater',  minKills:135, bossKills:55,  skyCol:0x2a1208, fogCol:0x4a1808, groundCol:0x8a3010, ambCol:0xff8855 },
-  { name:'🏚 Cursed Ruins',     minKills:210, bossKills:65,  skyCol:0x1a0a2a, fogCol:0x2a1040, groundCol:0x4a2860, ambCol:0xaa88ff },
-  { name:'🌊 Sunken Abyss',     minKills:300, bossKills:80,  skyCol:0x081828, fogCol:0x102030, groundCol:0x103048, ambCol:0x44aaff },
-  { name:'☁️ Sky Citadel',      minKills:410, bossKills:95,  skyCol:0xeef8ff, fogCol:0xffffff, groundCol:0xd8eeff, ambCol:0xffffff },
-  { name:'💀 Undead Sanctum',   minKills:540, bossKills:110, skyCol:0x080810, fogCol:0x101020, groundCol:0x1a1828, ambCol:0x8888ff },
-  { name:'🔥 Infernal Abyss',   minKills:700, bossKills:130, skyCol:0x100408, fogCol:0x200808, groundCol:0x601010, ambCol:0xff4422 },
-  { name:'⭐ Celestial Throne', minKills:890, bossKills:150, skyCol:0x0a0818, fogCol:0x181030, groundCol:0x2a1850, ambCol:0xffeeaa },
+  { name:'🌿 Verdant Fields',   minKills:0,    bossKills:50,  skyCol:0x87ceeb, fogCol:0xb8e4f0, groundCol:0x6db84a, ambCol:0xffeedd },
+  { name:'🌲 Darkwood Forest',  minKills:80,   bossKills:80,  skyCol:0x4a6e3a, fogCol:0x3a5a2a, groundCol:0x3a6a28, ambCol:0xccddbb },
+  { name:'🏔 Frostpeak Pass',   minKills:200,  bossKills:100, skyCol:0xaaccee, fogCol:0xc8ddf0, groundCol:0xc8ddf8, ambCol:0xddeeff },
+  { name:'🌋 Volcanic Crater',  minKills:380,  bossKills:120, skyCol:0x2a1208, fogCol:0x4a1808, groundCol:0x8a3010, ambCol:0xff8855 },
+  { name:'🏚 Cursed Ruins',     minKills:600,  bossKills:140, skyCol:0x1a0a2a, fogCol:0x2a1040, groundCol:0x4a2860, ambCol:0xaa88ff },
+  { name:'🌊 Sunken Abyss',     minKills:880,  bossKills:160, skyCol:0x081828, fogCol:0x102030, groundCol:0x103048, ambCol:0x44aaff },
+  { name:'☁️ Sky Citadel',      minKills:1220, bossKills:180, skyCol:0xeef8ff, fogCol:0xffffff, groundCol:0xd8eeff, ambCol:0xffffff },
+  { name:'💀 Undead Sanctum',   minKills:1620, bossKills:200, skyCol:0x080810, fogCol:0x101020, groundCol:0x1a1828, ambCol:0x8888ff },
+  { name:'🔥 Infernal Abyss',   minKills:2100, bossKills:220, skyCol:0x100408, fogCol:0x200808, groundCol:0x601010, ambCol:0xff4422 },
+  { name:'⭐ Celestial Throne', minKills:2700, bossKills:250, skyCol:0x0a0818, fogCol:0x181030, groundCol:0x2a1850, ambCol:0xffeeaa },
 ];
 
 const BOSS_DEFS = [
@@ -430,13 +522,221 @@ let bossSpawned = false; // whether boss for this zone has been spawned
 let lastBossLevel = 0;   // last level at which a boss was triggered
 let zoneKills = 0;       // kills accumulated within the current zone
 
-// ── ARCHER ABILITIES ──────────────────────────────────────────────────────────
-// Unlocked progressively as the archer levels up
+// ── STATUS EFFECTS ────────────────────────────────────────────────────────────
+// Each enemy can carry: bleed, burn, poison, freeze, slow, root, stun, fear, shock, curse
+const STATUS_COLORS = {
+  bleed:'#cc2244', burn:'#ff6622', poison:'#44cc22', freeze:'#44aaff',
+  slow:'#aaccff',  root:'#228822', stun:'#ffdd00',   fear:'#aa44cc',
+  shock:'#ffee44', curse:'#882288'
+};
+const STATUS_TICK_DMG = { bleed:4, burn:6, poison:3, shock:5 }; // per second
+const STATUS_DURATION = { bleed:4, burn:4, poison:6, freeze:2.5, slow:3, root:2, stun:1.8, fear:2.5, shock:3, curse:4 };
+
+function applyStatus(enemy, type, chance) {
+  if (!type || !chance) return;
+  if (Math.random() * 100 > chance) return;
+  if (!enemy.statuses) enemy.statuses = {};
+  enemy.statuses[type] = STATUS_DURATION[type] || 3;
+}
+
+function tickStatuses(dt) {
+  for (const e of enemies) {
+    if (e.dead || !e.statuses) continue;
+    for (const [type, dur] of Object.entries(e.statuses)) {
+      e.statuses[type] -= dt;
+      if (e.statuses[type] <= 0) { delete e.statuses[type]; continue; }
+      // Damage-over-time ticks
+      const tickDmg = STATUS_TICK_DMG[type];
+      if (tickDmg) {
+        e._statusDmgAccum = (e._statusDmgAccum || 0) + tickDmg * dt;
+        if (e._statusDmgAccum >= 1) {
+          const dmg = Math.floor(e._statusDmgAccum);
+          e._statusDmgAccum -= dmg;
+          e.hp -= dmg;
+          if (e.hp <= 0 && !e.dead) { dealDmg(e, 0); } // trigger kill
+        }
+      }
+    }
+  }
+}
+
+function getStatusTint(enemy) {
+  if (!enemy.statuses) return null;
+  const types = Object.keys(enemy.statuses);
+  if (!types.length) return null;
+  // Priority order
+  for (const t of ['stun','freeze','root','burn','bleed','poison','shock','slow','fear','curse']) {
+    if (enemy.statuses[t]) return STATUS_COLORS[t];
+  }
+  return null;
+}
+
+function isImmobilized(enemy) {
+  if (!enemy.statuses) return false;
+  return !!(enemy.statuses.freeze || enemy.statuses.root || enemy.statuses.stun);
+}
+
+function isSlowed(enemy) {
+  if (!enemy.statuses) return false;
+  return !!(enemy.statuses.slow || enemy.statuses.fear);
+}
+
+// ── PASSIVE POOL (from spreadsheet — class + universal) ────────────────────────
+const PASSIVE_POOL = [
+  // Universal passives
+  { key:'cold_steel',   icon:'⚔️', name:'Cold Steel',      src:'Berserker', eff:'ATK +20%',           apply:p=>{ p.atkPct=(p.atkPct||0)+.20; } },
+  { key:'rip_tear',     icon:'💢', name:'Rip & Tear',       src:'Berserker', eff:'Crit Chance +15%',   apply:p=>{ P.critChance+=15; } },
+  { key:'boiling_blood',icon:'🩸', name:'Boiling Blood',    src:'Berserker', eff:'ATK SPD +10%',       apply:p=>{ p.atkSpd=(p.atkSpd||0)+.10; } },
+  { key:'stoneskin',    icon:'🪨', name:'Stoneskin',         src:'Berserker', eff:'DEF +12%',           apply:p=>{ p.defPct=(p.defPct||0)+.12; } },
+  { key:'blood_drain',  icon:'🩸', name:'Blood Drain',       src:'Berserker', eff:'Lifesteal +5% on crit',apply:p=>{ p.lifesteal=(p.lifesteal||0)+.05; } },
+  { key:'adrenaline',   icon:'💉', name:'Adrenaline Rush',   src:'Berserker', eff:'Heal 15 HP on kills', apply:p=>{ p.killHeal=(p.killHeal||0)+15; } },
+  { key:'ill_omen',     icon:'🌑', name:'Ill Omen',          src:'Seeress',   eff:'+10 dmg to debuffed', apply:p=>{ p.debuffDmg=(p.debuffDmg||0)+10; } },
+  { key:'primeval',     icon:'🌀', name:'Primeval Currents', src:'Seeress',   eff:'All Skills +20% DMG', apply:p=>{ p.skillDmg=(p.skillDmg||0)+.20; } },
+  { key:'essence_exp',  icon:'⏳', name:'Essence Expansion', src:'Seeress',   eff:'Class Skill DMG +15%',apply:p=>{ p.skillDmg=(p.skillDmg||0)+.15; } },
+  { key:'spiteful_pace',icon:'💨', name:'Spiteful Pace',     src:'Seeress',   eff:'Move SPD +10%',      apply:p=>{ p.moveSpd=(p.moveSpd||0)+.6; } },
+  { key:'accuracy',     icon:'🎯', name:'Accuracy',          src:'Revenant',  eff:'Crit Chance +15%',   apply:p=>{ P.critChance+=15; } },
+  { key:'life_trap',    icon:'💚', name:'Life Trap',          src:'Revenant',  eff:'Healing Power +30%', apply:p=>{ p.healPwr=(p.healPwr||0)+.30; } },
+  { key:'light_footed', icon:'🦶', name:'Light-Footed',       src:'Revenant',  eff:'Move SPD +12%',      apply:p=>{ p.moveSpd=(p.moveSpd||0)+.72; } },
+  { key:'vampirism',    icon:'🧛', name:'Vampirism',          src:'Revenant',  eff:'Lifesteal +3%',      apply:p=>{ p.lifesteal=(p.lifesteal||0)+.03; } },
+  { key:'discipline',   icon:'🗡️', name:'Discipline',         src:'Flame Sister',eff:'Skill DMG +20%',  apply:p=>{ p.skillDmg=(p.skillDmg||0)+.20; } },
+  { key:'elusive',      icon:'💨', name:'Elusive',            src:'Flame Sister',eff:'Evasion +10%',     apply:p=>{ p.evasion=(p.evasion||0)+.10; } },
+  { key:'unseen_blade', icon:'🔪', name:'Unseen Blade',       src:'Flame Sister',eff:'Crit DMG +20%',    apply:p=>{ p.critDmg=(p.critDmg||0)+.20; } },
+  { key:'sadist',       icon:'😈', name:'Sadist',             src:'Flame Sister',eff:'Crit Chance +10% on debuffed',apply:p=>{ p.debuffCrit=(p.debuffCrit||0)+10; } },
+  { key:'rock_solid',   icon:'🪨', name:'Rock Solid',          src:'Warden',    eff:'Max HP +80',         apply:p=>{ P.maxHp+=80; P.hp=Math.min(P.hp+80,P.maxHp); } },
+  { key:'blunt_force',  icon:'🔨', name:'Blunt Force',         src:'Warden',    eff:'Stun Chance +7% on atk',apply:p=>{ p.atkStun=(p.atkStun||0)+7; } },
+  { key:'law_order',    icon:'⚖️', name:'Law & Order',         src:'Warden',    eff:'God Skill DMG +12%', apply:p=>{ p.skillDmg=(p.skillDmg||0)+.12; } },
+  { key:'pulverize',    icon:'💥', name:'Pulverize',           src:'Warden',    eff:'+25% DMG to stunned', apply:p=>{ p.stunnedDmg=(p.stunnedDmg||0)+.25; } },
+  { key:'ruthlessness', icon:'⚔️', name:'Ruthlessness',        src:'Kinslayer', eff:'Crit Chance +10%',   apply:p=>{ P.critChance+=10; } },
+  { key:'weighted_glaive',icon:'🌟',name:'Weighted Glaive',   src:'Kinslayer', eff:'Crit DMG +30%',       apply:p=>{ p.critDmg=(p.critDmg||0)+.30; } },
+  { key:'riposte',      icon:'🛡️', name:'Riposte',            src:'Kinslayer', eff:'30% counter on hit',  apply:p=>{ p.counterChance=(p.counterChance||0)+.30; } },
+  { key:'exiled_winds', icon:'🌬️', name:'Exiled Winds',       src:'Kinslayer', eff:'Move SPD +12%',       apply:p=>{ p.moveSpd=(p.moveSpd||0)+.72; } },
+  { key:'shadowblade',  icon:'🌑', name:'Shadowblade',         src:'Kinslayer', eff:'Class Skill DMG +25%',apply:p=>{ p.skillDmg=(p.skillDmg||0)+.25; } },
+  { key:'magic_weapon', icon:'🔮', name:'Magic Weapon',        src:'Archmage',  eff:'ATK DMG +15%',        apply:p=>{ p.atkPct=(p.atkPct||0)+.15; } },
+  { key:'explosive_nat',icon:'💥', name:'Explosive Nature',    src:'Archmage',  eff:'Chain lightning 15%', apply:p=>{ p.chainLightning=(p.chainLightning||0)+.15; } },
+  { key:'piercing',     icon:'🎯', name:'Piercing',            src:'Archmage',  eff:'Skill Crit +8%',      apply:p=>{ P.critChance+=8; } },
+  { key:'expeditious',  icon:'💨', name:'Expeditious Retreat', src:'Archmage',  eff:'Move SPD +15%',       apply:p=>{ p.moveSpd=(p.moveSpd||0)+.9; } },
+  { key:'triumph_heal', icon:'👑', name:'Fighter',             src:'Conan',     eff:'Heal 15 HP on kill',  apply:p=>{ p.killHeal=(p.killHeal||0)+15; } },
+  { key:'pirate',       icon:'🏴‍☠️', name:'Pirate',            src:'Conan',     eff:'Move SPD +12%',       apply:p=>{ p.moveSpd=(p.moveSpd||0)+.72; } },
+  { key:'ravager',      icon:'💢', name:'Ravager',             src:'Conan',     eff:'Crit Chance +15% when low HP',apply:p=>{ p.lowHpCrit=(p.lowHpCrit||0)+15; } },
+  { key:'swordsman_p',  icon:'⚔️', name:'Swordsman',           src:'Conan',     eff:'ATK SPD +10%',        apply:p=>{ p.atkSpd=(p.atkSpd||0)+.10; } },
+  // Universal rune-style passives
+  { key:'thurisaz',     icon:'🌿', name:'Thurisaz Rune',       src:'Rune',      eff:'HP Regen +2/s',       apply:p=>{ p.hpRegen=(p.hpRegen||0)+2; } },
+  { key:'hagalaz',      icon:'💧', name:'Hagalaz Rune',        src:'Rune',      eff:'Lifesteal +2%',       apply:p=>{ p.lifesteal=(p.lifesteal||0)+.02; } },
+  { key:'teiwaz',       icon:'⚔️', name:'Teiwaz Rune',         src:'Rune',      eff:'ATK DMG +15%',        apply:p=>{ p.atkPct=(p.atkPct||0)+.15; } },
+  { key:'inguz',        icon:'💥', name:'Inguz Rune',          src:'Rune',      eff:'Skill Crit DMG +12%', apply:p=>{ p.critDmg=(p.critDmg||0)+.12; } },
+  { key:'berkana',      icon:'❤️', name:'Berkana Rune',        src:'Rune',      eff:'Max HP +100',         apply:p=>{ P.maxHp+=100; P.hp=Math.min(P.hp+100,P.maxHp); } },
+  { key:'raido',        icon:'⚡', name:'Raido Rune',          src:'Rune',      eff:'ATK SPD +8%',         apply:p=>{ p.atkSpd=(p.atkSpd||0)+.08; } },
+];
+
+let pickedPassiveKeys = new Set();
+let pendingPickLevel = 0;
+
+// Map selCls keys to PASSIVE_POOL src values
+const CLS_TO_SRC = {
+  berserker:   'Berserker',
+  seeress:     'Seeress',
+  revenant:    'Revenant',
+  flameSister: 'Flame Sister',
+  warden:      'Warden',
+  kinslayer:   'Kinslayer',
+  archmage:    'Archmage',
+  conan:       'Conan',
+};
+
+function rollPassivePick() {
+  const clsSrc = CLS_TO_SRC[selCls] || '';
+  const options = [];
+
+  // Weapon options: upgrade existing or add new slot
+  const allClassWeapons = Object.entries(WEAPON_DEFS).filter(([k, w]) => {
+    // Match weapon key to class by checking CLASS_LOADOUTS and nearby keys
+    const loadout = CLASS_LOADOUTS[selCls] || [];
+    return loadout.includes(k) || true; // all weapons available as picks
+  });
+  // Add weapons player doesn't have yet (from their class loadout pool)
+  const classLoadout = CLASS_LOADOUTS[selCls] || [];
+  for (const key of classLoadout) {
+    if (!key) continue;
+    if (!weaponSlots.includes(key)) {
+      const wDef = WEAPON_DEFS[key];
+      options.push({
+        key: 'weapon_'+key,
+        icon: wDef.em,
+        name: wDef.lbl,
+        src: '⚔ New Weapon',
+        eff: 'Auto-fires ' + wDef.lbl + ' every ' + wDef.cd.toFixed(1) + 's',
+        apply: () => {
+          const slot = weaponSlots.findIndex(s => s === null);
+          if (slot >= 0) {
+            weaponSlots[slot] = key;
+            document.getElementById('se'+slot).textContent = wDef.em;
+            document.getElementById('sl'+slot).textContent = wDef.lbl;
+          }
+        }
+      });
+    }
+  }
+
+  // Passive options
+  const available = PASSIVE_POOL.filter(p =>
+    !pickedPassiveKeys.has(p.key) &&
+    (p.src === clsSrc || p.src === 'Rune')
+  );
+
+  const combined = [...options, ...available];
+  if (combined.length === 0) return [];
+  const shuffled = combined.slice().sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, Math.min(3, shuffled.length));
+}
+
+function openPassivePick(level) {
+  pendingPickLevel = level;
+  const picks = rollPassivePick();
+  if (picks.length === 0) return; // nothing left to pick
+  document.getElementById('pk-lvl').textContent = 'Level ' + level + ' — Choose a Passive';
+  const grid = document.getElementById('pk-grid');
+  grid.innerHTML = '';
+  for (const p of picks) {
+    const card = document.createElement('div');
+    card.className = 'pk-card';
+    card.innerHTML = `<div class="pk-icon">${p.icon}</div><div class="pk-text"><div class="pk-name">${p.name}</div><div class="pk-eff">${p.eff}</div><div class="pk-src">${p.src}</div></div>`;
+    card.onclick = () => selectPassive(p);
+    grid.appendChild(card);
+  }
+  document.getElementById('pickpanel').style.display = 'flex';
+  gamePaused = true;
+}
+
+function selectPassive(p) {
+  if (p.key && p.key.startsWith('weapon_')) {
+    p.apply();
+  } else {
+    pickedPassiveKeys.add(p.key);
+    p.apply(passives);
+    if (passives.atkSpd) {
+      for (let i = 0; i < 4; i++) {
+        const key = weaponSlots[i];
+        if (key) weaponCDs[i] = Math.max(0.1, WEAPON_DEFS[key].cd * (1 - passives.atkSpd * 0.5));
+      }
+    }
+  }
+  document.getElementById('pickpanel').style.display = 'none';
+  gamePaused = false;
+  const label = p.key && p.key.startsWith('weapon_') ? '⚔ New weapon: ' + p.name + '!' : '✨ ' + p.name + ' — ' + p.eff;
+  setLog(label, 3000);
+}
+
+function skipPassivePick() {
+  document.getElementById('pickpanel').style.display = 'none';
+  gamePaused = false;
+}
+
+// ── ARCHER ABILITIES (kept for compat but simplified) ──────────────────────────
 const archerAbilities = {
-  multishot:  { active:false, unlockLv:5,  label:'🏹 Multishot',     desc:'Fires an extra arrow (-10% dmg, -15% atk spd)' },
-  frontArrow: { active:false, unlockLv:10, label:'⬆ Front Arrow+1',  desc:'Extra arrow fires straight forward (-25% dmg)' },
-  ricochet:   { active:false, unlockLv:20, label:'💥 Ricochet',       desc:'Arrows bounce up to 3× nearby enemies (-30%/bounce)' },
-  piercing:   { active:false, unlockLv:35, label:'🔱 Piercing Shot',  desc:'Arrows pierce through enemies (-33% dmg/enemy)' },
+  multishot:  { active:false, unlockLv:5,  label:'🏹 Multishot',    desc:'Extra arrow fires' },
+  frontArrow: { active:false, unlockLv:10, label:'⬆ Front Arrow+1', desc:'Arrow fires forward' },
+  ricochet:   { active:false, unlockLv:20, label:'💥 Ricochet',      desc:'Arrows bounce' },
+  piercing:   { active:false, unlockLv:35, label:'🔱 Piercing Shot', desc:'Arrows pierce' },
 };
 
 function checkArcherAbilityUnlocks() {
@@ -448,9 +748,10 @@ function checkArcherAbilityUnlocks() {
       newUnlock = true;
       setLog('🏹 New Ability: ' + ab.label + '!', 4000);
       spawnFloat(ab.label, P.x, P.z, 'special');
-      // Apply multishot attack speed penalty
+      // Apply multishot attack speed penalty — slow down focus fire weapon
       if (key === 'multishot') {
-        cdMax[0] = cdMax[0] * 1.15;
+        const fw = 'focusFire';
+        if (WEAPON_DEFS[fw]) WEAPON_DEFS[fw].cd = WEAPON_DEFS[fw].cd * 1.15;
       }
     }
   }
@@ -647,19 +948,19 @@ function tickPassives(dt) {
       P.mp = Math.min(P.maxMp, P.mp + passives.mpRegen);
     }
   }
+  // Status effect ticks
+  tickStatuses(dt);
+  // Counter-attack passive
+  if (passives.counterChance && P.hurtFlash > 2.5) {
+    if (Math.random() < passives.counterChance) {
+      const t = nearestInRange(3);
+      if (t) { const cd = calcDmg(P.atk, 0.8, t); dealDmg(t, cd); }
+    }
+  }
 }
 
 function updateArcherAbilityPanel() {
-  const panel = document.getElementById('archerpanel');
-  if (selCls !== 'archer') { panel.style.display = 'none'; return; }
-  panel.style.display = 'flex';
-  const map = { multishot:'ab-multishot', frontArrow:'ab-frontarrow', ricochet:'ab-ricochet', piercing:'ab-piercing' };
-  for (const [key, ab] of Object.entries(archerAbilities)) {
-    const el = document.getElementById(map[key]);
-    if (!el) continue;
-    el.className = 'ab-pip ' + (ab.active ? 'active' : 'locked');
-    el.textContent = ab.label + (ab.active ? ' ✓' : ' Lv.'+ab.unlockLv);
-  }
+  // Archer panel removed from bullet-heaven mode — no-op
 }
 
 const ENEMY_DEFS=[
@@ -783,7 +1084,7 @@ function buildEnemyMesh(def){
 }
 
 // ── GAME STATE ───────────────────────────────────────────────────────────────
-let selCls='swordsman';
+let selCls='berserker';
 let P=null, enemies=[], floats=[];
 let autoMode=false, autoTarget=null;
 let kills=0, gold=0;
@@ -813,8 +1114,7 @@ function setupJoystick(){
 document.addEventListener('keydown',e=>{
   KEYS[e.code]=true;
   if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();
-  if(e.code==='Digit1')useSkill(0);if(e.code==='Digit2')useSkill(1);
-  if(e.code==='Digit3')useSkill(2);if(e.code==='Digit4')useSkill(3);
+  // Number keys removed - weapons fire automatically in bullet heaven mode
 });
 document.addEventListener('keyup',e=>{KEYS[e.code]=false;});
 
@@ -828,62 +1128,75 @@ function pickCls(cls,el){
 // ── START GAME ────────────────────────────────────────────────────────────────
 function startGame(){
   document.getElementById('ov').style.display='none';
+  try { _startGameInner(); } catch(err) {
+    const d=document.createElement('div');
+    d.style.cssText='position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);background:#aa0000cc;color:#fff;padding:16px;border-radius:8px;font-size:11px;z-index:9999;max-width:340px;word-break:break-all;';
+    d.innerHTML='<b>STARTUP ERROR:</b><br>'+err.message+'<br><small>'+(err.stack||'').split('\n').slice(0,4).join('<br>')+'</small>';
+    document.getElementById('wrap').appendChild(d);
+  }
+}
+function _startGameInner(){
   const cd=CLASSES[selCls];
   P={
     x:MAPSZ/2, z:MAPSZ/2,
     hp:cd.hp, maxHp:cd.hp, mp:cd.mp, maxMp:cd.mp,
     atk:cd.atk, def:cd.def, spd:cd.spd,
-    xp:0, xpNeeded:100, level:1,
+    xp:0, xpNeeded:300, level:1,
     animT:0, moving:false, facing:0,
     invTimer:0, hurtFlash:0,
     bobAngle:0,
     critChance:5,
-    stats:{ STR:0, VIT:0, INT:0, ASPD:0, DEX:0 },
+    stats:{ STR:0, VIT:0, INT:0, AGI:0, DEX:0 },
   };
   pendingLevels=[];statPanelOpen=false;totalUnspentPoints=0;
   currentZone=0; bossActive=null; bossSpawned=false; lastBossLevel=0; zoneKills=0;
-  // Reset archer abilities
-  for (const ab of Object.values(archerAbilities)) ab.active = false;
-  updateArcherAbilityPanel();
+  pickedPassiveKeys=new Set(); pendingPickLevel=0; gamePaused=false;
+  pickQueue=[]; pickPending=false;
+  wave=1; waveTimer=WAVE_INTERVAL; enemyAITimer=0;
+  // Load weapon slots for this class
+  const loadout = CLASS_LOADOUTS[selCls] || ['assault',null,null,null];
+  weaponSlots = [...loadout];
+  weaponCDs = [0,0,0,0];
+  // Update weapon display icons
+  for(let i=0;i<4;i++){
+    const key=weaponSlots[i];
+    const wDef=key?WEAPON_DEFS[key]:null;
+    document.getElementById('se'+i).textContent = wDef?wDef.em:'—';
+    document.getElementById('sl'+i).textContent = wDef?wDef.lbl:'EMPTY';
+  }
   // Reset passive upgrades
   UPGRADES.forEach(u => upgradeRanks[u.key] = 0);
   Object.keys(passives).forEach(k => passives[k] = 0);
   hpRegenTimer = 0; mpRegenTimer = 0;
   document.getElementById('goldbtn').style.display = 'block';
   updateZoneHUD();
-  cdMax=[0.9, cd.skills[0].cd, cd.skills[1].cd, cd.skills[2].cd];
-  cds=[0,0,0,0];
   document.getElementById('pport').textContent=cd.port;
   document.getElementById('pname').textContent='Aerin  Lv.1';
-  for(let i=0;i<3;i++){
-    document.getElementById('se'+(i+1)).textContent=cd.skills[i].em;
-    document.getElementById('sl'+(i+1)).textContent=cd.skills[i].lbl;
-  }
   buildPlayerMesh(selCls);
   playerGroup.position.set(P.x,0,P.z);
-  for(let i=0;i<150;i++)spawnEnemy();
+  for(let i=0;i<30;i++)spawnEnemy();
   setupJoystick();
   gc.addEventListener('pointerdown',onCanvasClick);
-  setInterval(enemyAI,650);
+  setLog('Entered Verdant Fields! Your weapons fire automatically — just move!', 4000);
   setInterval(()=>{if(P)P.mp=Math.min(P.maxMp,P.mp+4);},2000);
   setLog('Entered Verdant Fields! Use WASD or joystick to move.',4000);
   lastTs=performance.now();
   requestAnimationFrame(loop);
-}
+} // end _startGameInner
 
 // ── SPAWN ENEMY ───────────────────────────────────────────────────────────────
 function spawnEnemy(){
-  if(bossActive && !bossActive.dead) return; // don't clutter during boss fight
+  if(bossActive && !bossActive.dead) return;
   const lv=P?1+P.level*.04:1;
-  // Unlock more enemy types as zones progress; always allow up to current zone tier
-  const maxXp = 12 + currentZone * 12; // Zone 0→12, zone 9→120
+  const maxXp = 12 + currentZone * 12;
   const pool=ENEMY_DEFS.filter(e=>e.xp<=maxXp);
   const def=pool[Math.floor(Math.random()*pool.length)];
-  let ex,ez,tries=0;
-  do{ex=3+Math.random()*(MAPSZ-6);ez=3+Math.random()*(MAPSZ-6);tries++;}
-  while(P&&tries<50&&dist2(ex,ez,P.x,P.z)<6);
+  // Spawn in a ring around the player at a safe distance
+  const spawnDist = 18 + Math.random() * 10;
+  const ang = Math.random() * Math.PI * 2;
+  const ex = Math.max(1, Math.min(MAPSZ-1, (P?P.x:MAPSZ/2) + Math.cos(ang)*spawnDist));
+  const ez = Math.max(1, Math.min(MAPSZ-1, (P?P.z:MAPSZ/2) + Math.sin(ang)*spawnDist));
   const hp=Math.round(def.hp*lv);
-  // Scale mob visual size by zone (zone 0 = normal, zone 9 = 2x bigger)
   const zoneSzMult = 1 + currentZone * 0.12;
   const scaledDef = Object.assign({}, def, { sz: def.sz * zoneSzMult });
   const mesh=buildEnemyMesh(scaledDef);
@@ -891,7 +1204,7 @@ function spawnEnemy(){
   scene.add(mesh);
   enemies.push({x:ex,z:ez,mesh,def:scaledDef,hp,maxHp:hp,atk:Math.round(def.atk*lv*(1+currentZone*.08)),
     xp:Math.round(def.xp*lv),gold:Math.round(def.g*(0.8+Math.random()*.5)),
-    spd:def.spd,aggro:def.aggro,dead:false,hurtFlash:0,invTimer:0,animT:Math.random()*Math.PI*2,isBoss:false});
+    spd:def.spd,aggro:999,dead:false,hurtFlash:0,invTimer:0,animT:Math.random()*Math.PI*2,isBoss:false});
 }
 
 // ── BUILD BOSS MESH ───────────────────────────────────────────────────────────
@@ -996,97 +1309,275 @@ function spawnBoss(bossIndex) {
   setLog('⚠ BOSS: '+def.n+' has appeared! Defeat it to advance!', 5000);
 }
 
-// ── ENEMY AI ──────────────────────────────────────────────────────────────────
-function enemyAI(){
-  if(!P)return;
-  for(const e of enemies){
-    if(e.dead)continue;
-    const d=dist2(e.x,e.z,P.x,P.z);
-    if(d>e.aggro)continue;
-    if(d<=.9){
-      if(e.invTimer<=0&&P.invTimer<=0){
-        const dmg=Math.max(1,Math.round(e.atk-(P.def+(passives.defUp||0))*.5+(Math.random()-.3)*4));
-        P.hp=Math.max(0,P.hp-dmg);
-        P.hurtFlash=3;P.invTimer=.6;
-        spawnFloat('-'+dmg,P.x,P.z,'player');
-        if(P.hp<=0){showGameOver();return;}
+// ── WAVE SYSTEM ───────────────────────────────────────────────────────────────
+let wave = 1;
+let waveTimer = 30;        // seconds until next wave
+const WAVE_INTERVAL = 30;
+
+function tickWave(dt) {
+  if (!P) return;
+  waveTimer -= dt;
+  if (waveTimer <= 0) {
+    wave++;
+    waveTimer = WAVE_INTERVAL;
+    const count = 15 + wave * 5;
+    for (let i = 0; i < count; i++) spawnEnemy();
+    setLog('⚔ Wave ' + wave + '! ' + count + ' enemies incoming!', 3000);
+    spawnFloat('WAVE ' + wave + '!', P.x, P.z, 'special');
+  }
+  // Update wave HUD
+  const el = document.getElementById('wavehud');
+  if (el) el.textContent = '⚔ Wave ' + wave + ' · ' + Math.ceil(waveTimer) + 's';
+}
+
+// ── SPATIAL GRID for O(1) neighbor lookup ────────────────────────────────────
+const GRID_CELL = 2.0;  // world units per cell
+const GRID_SIZE = Math.ceil(60 / GRID_CELL) + 2;
+let spatialGrid = null;
+
+function rebuildGrid() {
+  spatialGrid = new Map();
+  for (const e of enemies) {
+    if (e.dead) continue;
+    const cx = Math.floor(e.x / GRID_CELL);
+    const cz = Math.floor(e.z / GRID_CELL);
+    const key = cx + ',' + cz;
+    if (!spatialGrid.has(key)) spatialGrid.set(key, []);
+    spatialGrid.get(key).push(e);
+  }
+}
+
+function getNeighborsAt(wx, wz, radius) {
+  const result = [];
+  const cells = Math.ceil(radius / GRID_CELL) + 1;
+  const cx0 = Math.floor(wx / GRID_CELL);
+  const cz0 = Math.floor(wz / GRID_CELL);
+  for (let cx = cx0 - cells; cx <= cx0 + cells; cx++) {
+    for (let cz = cz0 - cells; cz <= cz0 + cells; cz++) {
+      const arr = spatialGrid && spatialGrid.get(cx + ',' + cz);
+      if (arr) for (const e of arr) result.push(e);
+    }
+  }
+  return result;
+}
+
+// ── ENEMY AI (optimized, called every frame with dt) ─────────────────────────
+let enemyAITimer = 0;
+const ENEMY_AI_INTERVAL = 0.05; // 20hz
+
+function tickEnemyAI(dt) {
+  if (!P) return;
+  enemyAITimer += dt;
+  if (enemyAITimer < ENEMY_AI_INTERVAL) return;
+  const step = enemyAITimer;
+  enemyAITimer = 0;
+
+  rebuildGrid();
+
+  const alive = [];
+  for (const e of enemies) {
+    if (e.dead) continue;
+    alive.push(e);
+
+    const ddx = P.x - e.x, ddz = P.z - e.z;
+    const d = Math.sqrt(ddx * ddx + ddz * ddz);
+
+    // Attack player on contact
+    if (d <= 1.0) {
+      if (e.invTimer <= 0 && P.invTimer <= 0) {
+        const dmg = Math.max(1, Math.round(e.atk - (P.def + (passives.defUp||0)) * 0.5 + (Math.random() - 0.3) * 4));
+        P.hp = Math.max(0, P.hp - dmg);
+        P.hurtFlash = 3; P.invTimer = 0.55;
+        spawnFloat('-' + dmg, P.x, P.z, 'player');
+        if (P.hp <= 0) { showGameOver(); return; }
       }
-    } else {
-      const ang=Math.atan2(P.z-e.z,P.x-e.x);
-      const spd=e.spd*.65;
-      let nx=e.x+Math.cos(ang)*spd, nz=e.z+Math.sin(ang)*spd;
-      nx=Math.max(.5,Math.min(MAPSZ-.5,nx)); nz=Math.max(.5,Math.min(MAPSZ-.5,nz));
-      let blocked=false;
-      for(const o of enemies){if(o===e||o.dead)continue;if(dist2(nx,nz,o.x,o.z)<.7){blocked=true;break;}}
-      if(!blocked){e.x=nx;e.z=nz;}
+      continue;
     }
-  }
-  const alive=enemies.filter(e=>!e.dead).length;
-  if(alive<120){for(let i=0;i<10;i++)spawnEnemy();}
-}
 
-// ── SKILLS ────────────────────────────────────────────────────────────────────
-function useSkill(idx){
-  if(!P||cds[idx]>0)return;
-  if(idx===0){doAttack();return;}
-  const sk=CLASSES[selCls].skills[idx-1];
-  if(P.mp<sk.mp){setLog('Not enough MP!',1800);return;}
-  P.mp-=sk.mp; cds[idx]=cdMax[idx];
-  if(sk.heal){
-    const amt=Math.round(P.maxHp*sk.heal+Math.random()*15);
-    P.hp=Math.min(P.maxHp,P.hp+amt);
-    spawnFloat('+'+amt+' HP',P.x,P.z,'heal');
-    setLog('Recovered '+amt+' HP!',2000); return;
+    // ALL enemies always chase the player — bullet heaven core mechanic
+    if (isImmobilized(e)) continue;
+
+    const spdMult = isSlowed(e) ? 0.4 : 1.0;
+    const ang = Math.atan2(ddz, ddx);
+    const spd = e.spd * step * spdMult;
+    let nx = e.x + Math.cos(ang) * spd;
+    let nz = e.z + Math.sin(ang) * spd;
+    nx = Math.max(0.5, Math.min(59.5, nx));
+    nz = Math.max(0.5, Math.min(59.5, nz));
+
+    // Separation: push away from nearby enemies (spatial grid lookup)
+    const neighbors = getNeighborsAt(e.x, e.z, GRID_CELL * 1.5);
+    let sepX = 0, sepZ = 0;
+    for (const o of neighbors) {
+      if (o === e || o.dead) continue;
+      const ox = e.x - o.x, oz = e.z - o.z;
+      const od = Math.sqrt(ox * ox + oz * oz);
+      if (od < 0.8 && od > 0.001) { sepX += ox / od * 0.015; sepZ += oz / od * 0.015; }
+    }
+    nx += sepX; nz += sepZ;
+    e.x = Math.max(0.5, Math.min(59.5, nx));
+    e.z = Math.max(0.5, Math.min(59.5, nz));
   }
-  const range=sk.range||3;
-  if(sk.aoe){
-    let hit=0;
-    for(const e of enemies){
-      if(e.dead)continue;
-      if(dist2(P.x,P.z,e.x,e.z)<=range){dealDmg(e,calcDmg(P.atk,sk.mult,e));hit++;}
-    }
-    if(!hit){setLog('No enemies in range!',1500);P.mp+=sk.mp;cds[idx]=0;return;}
-    if(hit>1)spawnFloat(hit+'x HIT!',P.x,P.z,'special');
-    setLog(sk.lbl+' hits '+hit+' enemies!',1800);
-    spawnAoeRing(P.x,P.z,range);
-  } else {
-    const t=nearestInRange(range);
-    if(!t){setLog('No target in range!',1500);P.mp+=sk.mp;cds[idx]=0;return;}
-    autoTarget=t;updateTargetHUD();
-    const sdmg=calcDmg(P.atk,sk.mult,t);
-    // Use projectile for non-aoe skill attacks
-    if(selCls==='archer'){
-      spawnArrow(P.x,P.z,t,sdmg);
-    } else if(selCls==='wizard'){
-      spawnMagicBolt(P.x,P.z,t,sdmg,0xcc44ff);
-    } else if(selCls==='cleric'){
-      spawnHolyBeam(P.x,P.z,t,sdmg);
-    } else {
-      spawnSlashArc(P.x,P.z,t,sdmg);
-    }
-    setLog(sk.lbl+' → '+t.def.n+'!',1800);
+
+  // Keep 30 + wave*5 enemies alive at all times
+  const target = 30 + wave * 5;
+  if (alive.length < target) {
+    const batch = Math.min(8, target - alive.length);
+    for (let i = 0; i < batch; i++) spawnEnemy();
   }
 }
 
-function doAttack(){
-  if(cds[0]>0)return;
-  const attackRange = (selCls==='archer')?6.0:(selCls==='wizard')?5.0:(selCls==='cleric')?3.5:2.5;
-  let t=(autoTarget&&!autoTarget.dead&&dist2(P.x,P.z,autoTarget.x,autoTarget.z)<=attackRange)?autoTarget:nearestInRange(attackRange);
-  if(!t){setLog('No enemy in range!',1400);return;}
-  autoTarget=t;updateTargetHUD();
-  cds[0]=cdMax[0];
-  const dmg=calcDmg(P.atk,1.15,t);
-  // Spawn class-specific attack projectile — damage applied on arrival
-  if(selCls==='archer'){
-    spawnArrow(P.x,P.z,t,dmg);
-  } else if(selCls==='wizard'){
-    spawnMagicBolt(P.x,P.z,t,dmg,0x66aaff);
-  } else if(selCls==='cleric'){
-    spawnHolyBeam(P.x,P.z,t,dmg);
-  } else {
-    // Swordsman: slash arc projectile
-    spawnSlashArc(P.x,P.z,t,dmg);
+// ── AUTO-WEAPON ENGINE ────────────────────────────────────────────────────────
+function tickWeapons(dt) {
+  if (!P) return;
+  for (let i = 0; i < 4; i++) {
+    const key = weaponSlots[i];
+    if (!key) continue;
+    const wDef = WEAPON_DEFS[key];
+    if (!wDef) continue;
+    weaponCDs[i] = Math.max(0, weaponCDs[i] - dt);
+    if (weaponCDs[i] > 0) continue;
+
+    // Find target(s)
+    const skillMult = 1 + (passives.skillDmg || 0);
+    const atkMult   = 1 + (passives.atkPct   || 0);
+    const baseDmg   = Math.round(P.atk * wDef.dmgMult * skillMult * atkMult);
+
+    switch (wDef.type) {
+      case 'projectile': {
+        const t = nearestInRange(wDef.range);
+        if (!t) break;
+        const dmg = calcDmg(P.atk, wDef.dmgMult * skillMult, t);
+        spawnAutoProjectile(t, dmg, wDef);
+        break;
+      }
+      case 'beam': {
+        const t = nearestInRange(wDef.range);
+        if (!t) break;
+        const dmg = calcDmg(P.atk, wDef.dmgMult * skillMult, t);
+        spawnMagicBolt(P.x, P.z, t, dmg, weaponColor(key), wDef);
+        break;
+      }
+      case 'aoe': {
+        let hit = 0;
+        const nearby = getNeighborsAt(P.x, P.z, wDef.range);
+        for (const e of nearby) {
+          if (e.dead) continue;
+          if (dist2(P.x, P.z, e.x, e.z) > wDef.range) continue;
+          const dmg = calcDmg(P.atk, wDef.dmgMult * skillMult, e);
+          dealDmg(e, dmg, wDef); hit++;
+        }
+        if (hit > 0) spawnAoeRing(P.x, P.z, wDef.range);
+        break;
+      }
+      case 'nova': {
+        // Fires outward in all directions, hits nearby
+        let hit = 0;
+        const nearby = getNeighborsAt(P.x, P.z, wDef.range);
+        for (const e of nearby) {
+          if (e.dead) continue;
+          if (dist2(P.x, P.z, e.x, e.z) > wDef.range) continue;
+          const dmg = calcDmg(P.atk, wDef.dmgMult * skillMult, e);
+          dealDmg(e, dmg, wDef); hit++;
+        }
+        spawnNovaFX(P.x, P.z, wDef.range);
+        if (hit > 1) spawnFloat(hit + 'x', P.x, P.z, 'special');
+        break;
+      }
+      case 'spread': {
+        // Fire at up to `count` nearest enemies
+        const count = wDef.count || 3;
+        const targets = nearestNInRange(wDef.range, count);
+        if (!targets.length) break;
+        for (const t of targets) {
+          const dmg = calcDmg(P.atk, wDef.dmgMult * skillMult, t);
+          spawnAutoProjectile(t, dmg, wDef);
+        }
+        break;
+      }
+      case 'orbit': {
+        // Orbit weapon: damages all enemies within melee range each tick
+        const nearby = getNeighborsAt(P.x, P.z, wDef.range + 0.5);
+        for (const e of nearby) {
+          if (e.dead) continue;
+          if (dist2(P.x, P.z, e.x, e.z) > wDef.range) continue;
+          const dmg = calcDmg(P.atk, wDef.dmgMult * skillMult, e);
+          dealDmg(e, dmg, wDef);
+        }
+        spawnAoeRing(P.x, P.z, wDef.range);
+        break;
+      }
+    }
+    weaponCDs[i] = wDef.cd * (1 - (passives.atkSpd || 0) * 0.5);
   }
+}
+
+function spawnAutoProjectile(target, dmg, wDef) {
+  // Find the key for this wDef
+  const key = Object.keys(WEAPON_DEFS).find(k => WEAPON_DEFS[k] === wDef) || '';
+  const col = weaponColor(key);
+  spawnMagicBolt(P.x, P.z, target, dmg, col, wDef);
+}
+
+function weaponColor(key) {
+  const colors = {
+    assault:0xffddaa, axeThrow:0xff6622, cuttingEdge:0xff4422,
+    mindBlast:0xcc88ff, temporalTrap:0x88ccff, briarThorns:0x44ff88,
+    focusFire:0xffeeaa, skullShot:0xaa88ff, grapplingWeb:0x44aa44,
+    flamingRay:0xff6600, shrapnelPot:0xff8800, danceDaggers:0xff4488,
+    ironFist:0xffcc44, seismicShock:0xaabbcc, shieldwall:0x88aaff,
+    fallenValkyrie:0xddaaff, shadowImages:0x6644aa, javelins:0xffaacc,
+    magicBall:0x44aaff, magicPulse:0xffee44, magicNova:0x66ffff,
+    flurryBlades:0xffdd88, roarLion:0xff9900, cromRampage:0xff5500,
+  };
+  return colors[key] || 0x88aaff;
+}
+
+function spawnNovaFX(cx, cz, radius) {
+  const geo = new THREE.RingGeometry(0, radius, 32);
+  const mat = new THREE.MeshBasicMaterial({color:0xaaddff, transparent:true, opacity:0.35, side:THREE.DoubleSide, depthWrite:false});
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.rotation.x = -Math.PI / 2;
+  mesh.position.set(cx, 0.2, cz);
+  fxGroup.add(mesh);
+  aoeFXList.push({mesh, life:0.45, maxLife:0.45, radius});
+}
+
+function nearestInRange(range) {
+  if (!P) return null;
+  rebuildGrid();
+  const nearby = getNeighborsAt(P.x, P.z, range);
+  let best = null, bestD = range + 0.01;
+  for (const e of nearby) {
+    if (e.dead) continue;
+    const d = dist2(P.x, P.z, e.x, e.z);
+    if (d < bestD) { best = e; bestD = d; }
+  }
+  return best;
+}
+
+function nearestNInRange(range, n) {
+  if (!P) return [];
+  rebuildGrid();
+  const nearby = getNeighborsAt(P.x, P.z, range);
+  const hits = [];
+  for (const e of nearby) {
+    if (e.dead) continue;
+    const d = dist2(P.x, P.z, e.x, e.z);
+    if (d <= range) hits.push({e, d});
+  }
+  hits.sort((a, b) => a.d - b.d);
+  return hits.slice(0, n).map(h => h.e);
+}
+
+function closestEnemy() {
+  let best = null, bestD = Infinity;
+  for (const e of enemies) {
+    if (e.dead) continue;
+    const d = dist2(P.x, P.z, e.x, e.z);
+    if (d < bestD) { best = e; bestD = d; }
+  }
+  return best;
 }
 
 let _lastCritTarget = null; // set before calling calcDmg
@@ -1104,50 +1595,53 @@ function calcDmg(atk, mult, targetEnemy) {
   return base;
 }
 
-function dealDmg(e,dmg){
-  e.hp-=dmg; e.hurtFlash=3;
-  spawnFloat('-'+dmg,e.x,e.z,'enemy');
+function dealDmg(e, dmg, skillDef) {
+  // Bonus damage vs debuffed targets
+  if (dmg > 0 && e.statuses && Object.keys(e.statuses).length > 0) {
+    if (passives.debuffDmg) dmg += passives.debuffDmg;
+    if (passives.stunnedDmg && (e.statuses.stun || e.statuses.freeze)) dmg = Math.round(dmg * (1 + passives.stunnedDmg));
+  }
+  e.hp -= dmg; e.hurtFlash = 3;
+  if (dmg > 0) spawnFloat('-'+dmg, e.x, e.z, 'enemy');
   updateEnemyHpBar(e);
+  // Apply skill status effect
+  if (skillDef && skillDef.status) applyStatus(e, skillDef.status, skillDef.statusChance || 25);
+  // Apply passive attack stun
+  if (passives.atkStun && Math.random() * 100 < passives.atkStun) applyStatus(e, 'stun', 100);
   // Lifesteal
   if (P && passives.lifesteal > 0 && dmg > 0) {
     const heal = Math.max(1, Math.round(dmg * passives.lifesteal));
     P.hp = Math.min(P.maxHp, P.hp + heal);
     spawnFloat('🩸+'+heal, P.x, P.z, 'heal');
   }
-  // Update boss HUD HP bar
-  if(e.isBoss && bossActive===e){
-    const pct=Math.max(0,e.hp/e.maxHp*100);
-    document.getElementById('bosshpfill').style.width=pct+'%';
+  if (e.isBoss && bossActive === e) {
+    const pct = Math.max(0, e.hp / e.maxHp * 100);
+    document.getElementById('bosshpfill').style.width = pct + '%';
   }
-  if(e.hp<=0){
-    e.dead=true; kills++;
-    // Gold find passive bonus
-    const goldGain = Math.round(e.gold * (1 + (passives.goldFind || 0)));
-    gold += goldGain;
-    const xpGained=e.xp*1000000;
+  if (e.hp <= 0 && !e.dead) {
+    e.dead = true; kills++; gold += e.gold;
+    const xpGained = e.xp * 10;
     G_xp(xpGained);
-    spawnFloat('+'+goldGain+'g',e.x,e.z-0.5,'heal');
-    if(e.isBoss){
-      setLog('🏆 BOSS DEFEATED: '+e.def.n+'! +'+xpGained+' XP  +'+goldGain+' Gold',5000);
-      spawnFloat('BOSS SLAIN!',e.x,e.z,'special');
-      document.getElementById('bosshud').style.display='none';
-      bossActive=null;
-      bossSpawned=false;
-      zoneKills=0; // reset zone kill counter after boss defeated → ready for next zone
-      checkZoneProgression();
+    spawnFloat('+'+e.gold+'g', e.x, e.z - 0.5, 'heal');
+    // Kill heal passive
+    if (passives.killHeal) { P.hp = Math.min(P.maxHp, P.hp + passives.killHeal); }
+    if (e.isBoss) {
+      setLog('🏆 BOSS DEFEATED: '+e.def.n+'! +'+e.gold+' Gold', 5000);
+      spawnFloat('BOSS SLAIN!', e.x, e.z, 'special');
+      document.getElementById('bosshud').style.display = 'none';
+      bossActive = null; bossSpawned = false; zoneKills = 0;
     } else {
       zoneKills++;
-      setLog(e.def.n+' defeated! +'+xpGained+' XP  +'+goldGain+' Gold',2200);
-      // Check zone advancement first, then boss trigger
+      setLog(e.def.n + ' defeated! +' + e.gold + ' Gold', 1800);
       checkZoneProgression();
-      const z=ZONES[currentZone];
-      if(!bossSpawned && zoneKills>=z.bossKills){
-        bossSpawned=true;
-        setTimeout(()=>spawnBoss(currentZone),1500);
+      const z = ZONES[currentZone];
+      if (!bossSpawned && zoneKills >= z.bossKills) {
+        bossSpawned = true;
+        setTimeout(() => spawnBoss(currentZone), 1500);
       }
     }
-    setTimeout(()=>{if(e.mesh)scene.remove(e.mesh);},400);
-    if(autoTarget===e){autoTarget=closestEnemy();updateTargetHUD();}
+    setTimeout(() => { if (e.mesh) scene.remove(e.mesh); }, 400);
+    if (autoTarget === e) { autoTarget = closestEnemy(); updateTargetHUD(); }
   }
 }
 
@@ -1168,31 +1662,53 @@ const STAT_DEFS = [
   { key:'STR',  icon:'⚔️', name:'Strength',     desc:'ATK +2 per point',           color:'#ff8866' },
   { key:'VIT',  icon:'❤️', name:'Vitality',     desc:'Max HP +20 per point',        color:'#ff6677' },
   { key:'INT',  icon:'🔮', name:'Intellect',    desc:'Max MP +15 per point',         color:'#6688ff' },
-  { key:'ASPD', icon:'⚡', name:'Attack Speed', desc:'Attack CD −0.05s per point',  color:'#ffee44' },
+  { key:'AGI',  icon:'💨', name:'Agility',      desc:'All weapon CDs −5% per point', color:'#ffee44' },
   { key:'DEX',  icon:'🎯', name:'Dexterity',    desc:'Crit chance +2% per point',   color:'#88ffcc' },
 ];
 const POINTS_PER_LEVEL = 5;
 let totalUnspentPoints = 0;   // accumulated, never auto-spent
-let statPending = { STR:0, VIT:0, INT:0, ASPD:0, DEX:0 };
+let statPending = { STR:0, VIT:0, INT:0, AGI:0, DEX:0 };
 let statPointsLeft = 0;
 let statPanelOpen = false;
 let pendingLevels = [];       // kept for compat, not actively used
 
+let pickQueue = [];  // queued level-up picks
+let pickPending = false;
+
 function G_xp(amt) {
   P.xp += amt;
+  let leveled = false;
   while (P.xp >= P.xpNeeded) {
     P.xp -= P.xpNeeded;
     P.level++;
-    P.xpNeeded = Math.round(P.xpNeeded * 1.15);
+    P.xpNeeded = Math.round(P.xpNeeded * 1.20);
     P.maxHp += 15; P.hp = Math.min(P.hp + 15, P.maxHp);
     P.maxMp += 8;  P.mp = Math.min(P.mp + 8,  P.maxMp);
     totalUnspentPoints += POINTS_PER_LEVEL;
+    pickQueue.push(P.level);
     spawnFloat('LEVEL UP!', P.x, P.z, 'special');
     document.getElementById('pname').textContent = 'Aerin  Lv.' + P.level;
-    setLog('🎉 Level Up! Lv.' + P.level + ' — tap your portrait to assign stats!', 3000);
     checkArcherAbilityUnlocks();
+    checkZoneProgression();
+    const z = ZONES[currentZone];
+    if (!bossSpawned && zoneKills >= z.bossKills) {
+      bossSpawned = true;
+      setTimeout(() => spawnBoss(currentZone), 1500);
+    }
+    leveled = true;
   }
   updatePointsBadge();
+  // Auto-show pick panel after leveling up (if not already showing one)
+  if (leveled && !gamePaused && !pickPending && pickQueue.length > 0) {
+    pickPending = true;
+    setTimeout(() => { pickPending = false; showNextPick(); }, 600);
+  }
+}
+
+function showNextPick() {
+  if (pickQueue.length === 0) return;
+  pickQueue.length = 0; // drain all queued levels into one pick
+  openPassivePick(P.level);
 }
 
 function checkZoneProgression() {
@@ -1206,12 +1722,10 @@ function checkZoneProgression() {
     scene.background = new THREE.Color(z.skyCol);
     scene.fog.color  = new THREE.Color(z.fogCol);
     ambientLight.color = new THREE.Color(z.ambCol);
-    // Recolor ground tiles
-    tileGroup.children.forEach(tile => {
-      const t = tile.userData.tileType || 'grass';
+    // Tint merged tile materials
+    tileGroup.children.forEach(mesh => {
       const base = new THREE.Color(z.groundCol);
-      const variation = (Math.random() - 0.5) * 0.1;
-      tile.material = new THREE.MeshLambertMaterial({color: base.offsetHSL(0, 0, variation)});
+      mesh.material.color.set(base);
     });
     setLog('🌍 Entered: ' + z.name + '!', 4000);
     spawnFloat(z.name, P.x, P.z, 'special');
@@ -1239,10 +1753,20 @@ function updateZoneHUD() {
   }
 }
 
+function onPortraitTap() {
+  if (!P) return;
+  if (pickQueue.length > 0) {
+    showNextPick(); // open pick panel if pending picks
+  } else {
+    openStatPanel(); // otherwise open stat panel
+  }
+}
+
 function updatePointsBadge() {
   const badge = document.getElementById('pt-badge');
-  if (totalUnspentPoints > 0) {
-    badge.textContent = totalUnspentPoints > 99 ? '99+' : totalUnspentPoints;
+  const total = (pickQueue.length > 0 ? pickQueue.length : 0) + (totalUnspentPoints > 0 ? 1 : 0);
+  if (total > 0 || pickQueue.length > 0) {
+    badge.textContent = pickQueue.length > 0 ? '⭐' + pickQueue.length : totalUnspentPoints;
     badge.style.display = 'flex';
   } else {
     badge.style.display = 'none';
@@ -1253,14 +1777,14 @@ function openStatPanel() {
   if (!P) return;
   statPanelOpen = true;
   statPointsLeft = totalUnspentPoints;
-  statPending = { STR:0, VIT:0, INT:0, ASPD:0, DEX:0 };
+  statPending = { STR:0, VIT:0, INT:0, AGI:0, DEX:0 };
 
   document.getElementById('sp-lvl').textContent = 'Lv.' + P.level + ' — Aerin';
   document.getElementById('sp-pts').textContent = statPointsLeft;
 
   // Current stat summary
   const sr = document.getElementById('sp-statrow');
-  sr.innerHTML = `ATK <span>${P.atk}</span> &nbsp; HP <span>${P.maxHp}</span> &nbsp; MP <span>${P.maxMp}</span> &nbsp; AtkCD <span>${cdMax[0].toFixed(2)}s</span> &nbsp; CRIT <span>${(P.critChance||5)}%</span>`;
+  sr.innerHTML = `ATK <span>${P.atk}</span> &nbsp; HP <span>${P.maxHp}</span> &nbsp; MP <span>${P.maxMp}</span> &nbsp; SPD <span>${P.spd.toFixed(1)}</span> &nbsp; CRIT <span>${(P.critChance||5)}%</span>`;
 
   // Build rows
   const grid = document.getElementById('sp-grid');
@@ -1292,7 +1816,7 @@ function openStatPanel() {
 
 function closeStatPanel() {
   // Points not spent are kept for later — reset pending only
-  statPending = { STR:0, VIT:0, INT:0, ASPD:0, DEX:0 };
+  statPending = { STR:0, VIT:0, INT:0, AGI:0, DEX:0 };
   document.getElementById('statpanel').style.display = 'none';
   statPanelOpen = false;
 }
@@ -1364,7 +1888,7 @@ function getStatBonus(key, pts) {
   if (key==='STR')  return 'ATK+'  + (pts*2);
   if (key==='VIT')  return 'HP+'   + (pts*20);
   if (key==='INT')  return 'MP+'   + (pts*15);
-  if (key==='ASPD') return 'AtkCD−' + (pts*0.05).toFixed(2)+'s';
+  if (key==='AGI')  return '−' + (pts*5) + '% weapon CD';
   if (key==='DEX')  return 'CRIT+' + (pts*2) + '%';
   return '';
 }
@@ -1377,7 +1901,15 @@ function applyStats(pending) {
     if (sd.key==='STR')  { P.atk += pts * 2; }
     if (sd.key==='VIT')  { P.maxHp += pts * 20; P.hp = Math.min(P.hp + pts*20, P.maxHp); }
     if (sd.key==='INT')  { P.maxMp += pts * 15; P.mp = Math.min(P.mp + pts*15, P.maxMp); }
-    if (sd.key==='ASPD') { cdMax[0] = Math.max(0.15, cdMax[0] - pts * 0.05); }
+    if (sd.key==='AGI') {
+      // Reduce all weapon cooldowns by 5% per point (stacks multiplicatively)
+      const mult = Math.pow(0.95, pts);
+      for (let wi=0; wi<4; wi++) {
+        const wk = weaponSlots[wi];
+        if (wk && WEAPON_DEFS[wk]) WEAPON_DEFS[wk].cd = Math.max(0.12, WEAPON_DEFS[wk].cd * mult);
+      }
+      passives.atkSpd = (passives.atkSpd || 0) + pts * 0.05; // also affects ongoing CD calc
+    }
     if (sd.key==='DEX')  { P.critChance = (P.critChance||5) + pts * 2; }
   }
 }
@@ -1391,23 +1923,6 @@ function confirmStats() {
   // Refresh panel in place so they can keep spending remaining points
   openStatPanel();
   setLog('Stats applied! ' + (totalUnspentPoints > 0 ? totalUnspentPoints + ' points remaining.' : 'All points spent!'), 2500);
-}
-
-function nearestInRange(range){
-  let best=null,bestD=range+.01;
-  for(const e of enemies){if(e.dead)continue;const d=dist2(P.x,P.z,e.x,e.z);if(d<bestD){best=e;bestD=d;}}
-  return best;
-}
-function closestEnemy(){
-  let best=null,bestD=Infinity;
-  for(const e of enemies){if(e.dead)continue;const d=dist2(P.x,P.z,e.x,e.z);if(d<bestD){best=e;bestD=d;}}
-  return best;
-}
-function toggleAuto(){
-  autoMode=!autoMode;
-  document.getElementById('skauto').classList.toggle('on',autoMode);
-  if(autoMode){autoTarget=closestEnemy();updateTargetHUD();}
-  setLog(autoMode?'Auto-battle ON':'Auto-battle OFF',2000);
 }
 
 // ── CANVAS CLICK (target) ─────────────────────────────────────────────────────
@@ -1428,7 +1943,7 @@ function onCanvasClick(e){
     while(obj.parent&&!obj.userData.enemyRef)obj=obj.parent;
     // find enemy by mesh
     const en=enemies.find(e=>e.mesh===obj||e.mesh===obj.parent||isChildOf(obj,e.mesh));
-    if(en&&!en.dead){autoTarget=en;updateTargetHUD();useSkill(0);}
+    if(en&&!en.dead){autoTarget=en;updateTargetHUD();}
   }
 }
 function isChildOf(child,parent){let c=child;while(c){if(c===parent)return true;c=c.parent;}return false;}
@@ -1518,12 +2033,11 @@ function spawnArrow(sx, sz, target, dmg, opts) {
   }
 }
 
-function spawnMagicBolt(sx,sz,target,dmg,color){
+function spawnMagicBolt(sx,sz,target,dmg,color,skillDef){
   const col=color||0x88aaff;
   const orbGeo=new THREE.SphereGeometry(.18,8,6);
   const orbMat=new THREE.MeshBasicMaterial({color:col});
   const orb=new THREE.Mesh(orbGeo,orbMat);
-  // Glow ring
   const glowGeo=new THREE.SphereGeometry(.28,8,6);
   const glowMat=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:.35,depthWrite:false});
   const glow=new THREE.Mesh(glowGeo,glowMat);
@@ -1531,11 +2045,10 @@ function spawnMagicBolt(sx,sz,target,dmg,color){
   g.add(orb); g.add(glow);
   g.position.set(sx,.9,sz);
   fxGroup.add(g);
-  projectileList.push({mesh:g,target,dmg,speed:14,type:'bolt',color:col,life:3,pulseT:0});
+  projectileList.push({mesh:g,target,dmg,speed:14,type:'bolt',color:col,life:3,pulseT:0,skillDef});
 }
 
-function spawnHolyBeam(sx,sz,target,dmg){
-  // Rising star cluster for cleric
+function spawnHolyBeam(sx,sz,target,dmg,skillDef){
   const g=new THREE.Group();
   const starMat=new THREE.MeshBasicMaterial({color:0xffee88,transparent:true,opacity:.9});
   for(let i=0;i<5;i++){
@@ -1545,11 +2058,10 @@ function spawnHolyBeam(sx,sz,target,dmg){
   }
   g.position.set(sx,.8,sz);
   fxGroup.add(g);
-  projectileList.push({mesh:g,target,dmg,speed:12,type:'holy',life:3,spinT:0});
+  projectileList.push({mesh:g,target,dmg,speed:12,type:'holy',life:3,spinT:0,skillDef});
 }
 
-function spawnSlashArc(px,pz,target,dmg){
-  // Sword slash: two crossing ring arcs that expand toward target
+function spawnSlashArc(px,pz,target,dmg,skillDef){
   const g=new THREE.Group();
   const mat1=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.95,side:THREE.DoubleSide,depthWrite:false});
   const mat2=new THREE.MeshBasicMaterial({color:0xffee88,transparent:true,opacity:.75,side:THREE.DoubleSide,depthWrite:false});
@@ -1562,7 +2074,7 @@ function spawnSlashArc(px,pz,target,dmg){
   g.position.set(px,.4,pz);
   g.rotation.y=Math.atan2(dx,dz);
   fxGroup.add(g);
-  projectileList.push({mesh:g,target,dmg,speed:22,type:'slash',life:3,scaleT:0});
+  projectileList.push({mesh:g,target,dmg,speed:22,type:'slash',life:3,scaleT:0,skillDef});
 }
 
 function spawnSlashFX(ex,ez){
@@ -1598,31 +2110,36 @@ function checkAutoPotion(dt) {
   if (!P) return;
   autoPotionCd = Math.max(0, autoPotionCd - dt);
   if (autoPotionCd > 0) return;
+  // Auto-heal when low — direct heal, no skill system needed
   if (P.hp / P.maxHp <= AUTO_POTION_THRESHOLD) {
-    // Try skill slot 3 (potion/heal) first
-    const sk3 = CLASSES[selCls].skills[2]; // 0-indexed skill list (skills[2] = slot index 3)
-    if (sk3 && sk3.heal && P.mp >= (sk3.mp||0) && cds[3] <= 0) {
-      useSkill(3);
-      autoPotionCd = AUTO_POTION_CD;
-      setLog('💊 Auto-potion triggered!', 1800);
-    } else {
-      // Fallback: direct heal 25% max HP, no MP cost
-      const amt = Math.round(P.maxHp * 0.25);
-      P.hp = Math.min(P.maxHp, P.hp + amt);
-      spawnFloat('+'+amt+' HP', P.x, P.z, 'heal');
-      setLog('💊 Emergency heal! +'+amt+' HP', 1800);
-      autoPotionCd = AUTO_POTION_CD;
-    }
+    const amt = Math.round(P.maxHp * 0.25);
+    P.hp = Math.min(P.maxHp, P.hp + amt);
+    spawnFloat('+'+amt+' HP', P.x, P.z, 'heal');
+    setLog('💊 Auto-potion! +'+amt+' HP', 1800);
+    autoPotionCd = AUTO_POTION_CD;
   }
 }
 
 // ── MAIN LOOP ─────────────────────────────────────────────────────────────────
 let lastTs=0;
+let gamePaused = false;
+
 function loop(ts){
   const dt=Math.min((ts-lastTs)/1000,.05);
   lastTs=ts;
-  update(dt);
-  updateScene(dt);
+  if(!gamePaused){
+    try {
+      update(dt);
+      updateScene(dt);
+    } catch(err) {
+      // Show error visibly on screen
+      const d = document.createElement('div');
+      d.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#ff0000cc;color:#fff;padding:16px;border-radius:8px;font-size:11px;z-index:9999;max-width:340px;word-break:break-all;pointer-events:all;';
+      d.innerHTML = '<b>JS ERROR:</b><br>' + err.message + '<br><small>' + (err.stack||'').split('\n').slice(0,3).join('<br>') + '</small>';
+      document.getElementById('wrap').appendChild(d);
+      gamePaused = true; // stop the loop from spamming errors
+    }
+  }
   renderer.render(scene,camera);
   updateHUD();
   requestAnimationFrame(loop);
@@ -1631,7 +2148,6 @@ function loop(ts){
 // ── UPDATE ────────────────────────────────────────────────────────────────────
 function update(dt){
   if(!P)return;
-  for(let i=0;i<4;i++)cds[i]=Math.max(0,cds[i]-dt);
   P.hurtFlash=Math.max(0,P.hurtFlash-dt*8);
   P.invTimer=Math.max(0,P.invTimer-dt);
   P.animT+=dt;
@@ -1641,7 +2157,7 @@ function update(dt){
   checkAutoPotion(dt);
   tickPassives(dt);
 
-  // Movement input
+  // Movement input — player only, weapons fire automatically
   let mdx=0,mdz=0;
   if(KEYS['ArrowLeft']||KEYS['KeyA'])mdx-=1;
   if(KEYS['ArrowRight']||KEYS['KeyD'])mdx+=1;
@@ -1649,23 +2165,20 @@ function update(dt){
   if(KEYS['ArrowDown']||KEYS['KeyS'])mdz+=1;
   if(joyActive){mdx=joyDx;mdz=joyDy;}
 
-  if(autoMode&&autoTarget&&!autoTarget.dead){
-    const ddx=autoTarget.x-P.x,ddz=autoTarget.z-P.z,d=Math.sqrt(ddx*ddx+ddz*ddz);
-    const stopDist=(selCls==='archer')?5.0:(selCls==='wizard')?4.0:(selCls==='cleric')?3.0:1.8;
-    if(d>stopDist){mdx=ddx/d;mdz=ddz/d;}
-    else if(cds[0]<=0)useSkill(0);
-  } else if(autoMode){autoTarget=closestEnemy();updateTargetHUD();}
-
   const ml=Math.sqrt(mdx*mdx+mdz*mdz);
   if(ml>0){
     mdx/=ml;mdz/=ml;
-    const spd = (P.spd + (passives.moveSpd||0)) * dt;
+    const spd=(P.spd+(passives.moveSpd||0))*dt;
     P.x=Math.max(.5,Math.min(MAPSZ-.5,P.x+mdx*spd));
     P.z=Math.max(.5,Math.min(MAPSZ-.5,P.z+mdz*spd));
     P.facing=Math.atan2(mdx,mdz);
     P.moving=true;
     P.bobAngle+=dt*10;
   } else {P.moving=false;}
+
+  tickWeapons(dt);
+  tickEnemyAI(dt);
+  tickWave(dt);
 }
 
 // ── UPDATE SCENE OBJECTS ──────────────────────────────────────────────────────
@@ -1696,9 +2209,17 @@ function updateScene(dt){
     e.mesh.position.y=eBob;
     // Face player
     e.mesh.rotation.y=Math.atan2(P.x-e.x,P.z-e.z);
-    // Hurt flash
-    const ec=e.hurtFlash>0?0x441100:0x000000;
-    e.mesh.traverse(c=>{if(c.isMesh&&c.material&&c.material.emissive)c.material.emissive.set(ec);});
+    // Hurt flash + status tint
+    const statusTint = getStatusTint(e);
+    let emissiveHex = 0x000000;
+    if (e.hurtFlash > 0) emissiveHex = 0x441100;
+    else if (statusTint) {
+      // Parse hex color string to number
+      const c = parseInt(statusTint.replace('#',''), 16);
+      emissiveHex = Math.round((c & 0xff0000) * 0.15) | Math.round((c & 0x00ff00) * 0.15) | Math.round((c & 0x0000ff) * 0.15);
+      emissiveHex = Math.min(0x333333, emissiveHex);
+    }
+    e.mesh.traverse(c=>{if(c.isMesh&&c.material&&c.material.emissive)c.material.emissive.setHex(emissiveHex);});
     // Target ring visibility
     const ring=e.mesh.getObjectByName('ring');
     if(ring)ring.material.opacity=autoTarget===e?0.7:0.0;
@@ -1783,8 +2304,8 @@ function updateScene(dt){
             fxGroup.remove(p.mesh); projectileList.splice(i,1); continue;
           }
         } else if(p.ricochet && p.ricochetCount < 3){
-          // Deal damage to current target
-          dealDmg(p.target, p.dmg);
+          dealDmg(p.target, p.dmg, p.skillDef);
+          spawnSlashFX(p.target.x, p.target.z);
           spawnSlashFX(p.target.x, p.target.z);
           p.piercedEnemies = p.piercedEnemies || [];
           p.piercedEnemies.push(p.target);
@@ -1812,14 +2333,14 @@ function updateScene(dt){
           }
         } else {
           // Normal arrow landing
-          dealDmg(p.target, p.dmg);
+          dealDmg(p.target, p.dmg, p.skillDef);
           spawnSlashFX(p.target.x, p.target.z);
           fxGroup.remove(p.mesh); projectileList.splice(i,1); continue;
         }
       }
 
       // ── OTHER PROJECTILE TYPES ─────────────────────────────────────────────
-      dealDmg(p.target, p.dmg);
+      dealDmg(p.target, p.dmg, p.skillDef);
       if(p.type==='bolt'){
         const imp=new THREE.Mesh(new THREE.SphereGeometry(.5,8,6),
           new THREE.MeshBasicMaterial({color:p.color||0x88aaff,transparent:true,opacity:.8}));
@@ -1944,6 +2465,7 @@ function drawMinimap(){
 // ── HUD UPDATE ────────────────────────────────────────────────────────────────
 function updateHUD(){
   if(!P)return;
+  try {
   document.getElementById('hpbar').style.width=Math.round(P.hp/P.maxHp*100)+'%';
   document.getElementById('mpbar').style.width=Math.round(P.mp/P.maxMp*100)+'%';
   document.getElementById('hptxt').textContent=P.hp+'/'+P.maxHp;
@@ -1953,6 +2475,12 @@ function updateHUD(){
   updateZoneHUD();
   for(let i=0;i<4;i++)drawCdRing(i);
   drawMinimap();
+  } catch(err) {
+    const d=document.createElement('div');
+    d.style.cssText='position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);background:#8800aacc;color:#fff;padding:16px;border-radius:8px;font-size:11px;z-index:9999;max-width:340px;word-break:break-all;';
+    d.innerHTML='<b>HUD ERROR:</b><br>'+err.message+'<br><small>'+(err.stack||'').split('\n').slice(0,3).join('<br>')+'</small>';
+    document.getElementById('wrap').appendChild(d);
+  }
 }
 
 function updateTargetHUD(){
@@ -1971,9 +2499,11 @@ function drawCdRing(i){
   const c=document.getElementById(ids[i]),sz=szs[i];
   const cx2=c.getContext('2d');
   cx2.clearRect(0,0,sz,sz);
-  const val=cds[i],max=cdMax[i];
+  const key=weaponSlots[i];
+  const wDef=key?WEAPON_DEFS[key]:null;
+  const val=weaponCDs[i], max=wDef?wDef.cd:1;
   if(val<=0||max<=0)return;
-  const pct=val/max,r2=sz/2-sz*.07;
+  const pct=val/max, r2=sz/2-sz*.07;
   cx2.fillStyle='rgba(0,0,0,.55)';
   cx2.beginPath();cx2.arc(sz/2,sz/2,sz/2-1,0,Math.PI*2);cx2.fill();
   cx2.strokeStyle='rgba(255,210,60,.85)';cx2.lineWidth=sz*.09;cx2.lineCap='round';
