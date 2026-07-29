@@ -28,10 +28,9 @@
     -webkit-tap-highlight-color:transparent;
     touch-action:none;
   }
-  #app{position:fixed; inset:0; height:100vh; height:100dvh;
-    display:flex; align-items:center; justify-content:center; overflow:hidden;}
-  #wrap{position:relative; width:648px; height:874px; transform-origin:center center;
-    flex:0 0 auto;}
+  #app{position:fixed; inset:0; height:100vh; height:100dvh; overflow:hidden;}
+  #wrap{position:absolute; left:50%; top:50%; width:648px; height:874px;
+    margin-left:-324px; margin-top:-437px; transform-origin:center center;}
   #stage{position:absolute; inset:0; border-radius:6px; overflow:hidden;
     border:2px solid #6b5340; box-shadow:0 0 0 1px #241c15, 0 24px 70px rgba(0,0,0,.85)}
   svg.scene{position:absolute; inset:0; width:100%; height:100%; display:block}
@@ -132,7 +131,8 @@
 </style>
 </head>
 <body>
-<div id="wrap">
+<div id="app">
+  <div id="wrap">
   <div id="stage">
 
   <svg class="scene" viewBox="0 0 648 874" xmlns="http://www.w3.org/2000/svg" aria-label="Pick the lock">
@@ -239,6 +239,24 @@
         <feFlood flood-color="#e6f0ff" flood-opacity="1"/>
         <feComposite in2="tt" operator="in" result="n2"/>
         <feMerge><feMergeNode in="n1"/><feMergeNode in="n1"/><feMergeNode in="n2"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="glowGoldLite" filterUnits="userSpaceOnUse" x="140" y="382" width="368" height="368">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="4.5" result="b"/>
+        <feFlood flood-color="#ffc226" flood-opacity=".9"/>
+        <feComposite in2="b" operator="in" result="g"/>
+        <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="glowBlueLite" filterUnits="userSpaceOnUse" x="140" y="382" width="368" height="368">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="4.5" result="b"/>
+        <feFlood flood-color="#2f9be8" flood-opacity=".9"/>
+        <feComposite in2="b" operator="in" result="g"/>
+        <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="needleGlowLite" filterUnits="userSpaceOnUse" x="140" y="382" width="368" height="368">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="b"/>
+        <feFlood flood-color="#6ea8ff" flood-opacity=".9"/>
+        <feComposite in2="b" operator="in" result="g"/>
+        <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
       </filter>
       <filter id="glowRed" filterUnits="userSpaceOnUse" x="104" y="346" width="440" height="440">
         <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="w"/>
@@ -541,7 +559,7 @@
     </g>
 
     <!-- controls -->
-    <g font-family="Georgia,serif" fill="#efe4d2" font-size="13.5" letter-spacing="1.4">
+    <g id="ctlHints" font-family="Georgia,serif" fill="#efe4d2" font-size="13.5" letter-spacing="1.4">
       <text x="588" y="756" text-anchor="end">PICK</text>
       <rect x="598" y="740" width="19" height="27" rx="9.5" fill="#c9c4bc" stroke="#5a544c" stroke-width="1.5"/>
       <path d="M598 750a9.5 9.5 0 0 1 9.5-9.5V752h-9.5z" fill="#8f8a82"/>
@@ -558,7 +576,17 @@
   </svg>
 
   <canvas id="fx" width="648" height="874"></canvas>
-  <div id="missVeil"></div>
+  </div>
+  </div>
+</div>
+
+<div id="missVeil"></div>
+
+<!-- touch controls, viewport-fixed so they stay reachable at any scale -->
+<div id="mobileCtl">
+  <button id="boostBtn" class="mbtn">BOOST</button>
+  <button id="pauseBtn" class="mbtn">&#10073;&#10073;</button>
+</div>
 
   <!-- START -->
   <div class="veil" id="startVeil">
@@ -573,7 +601,8 @@
         up to <b style="color:#ffd84d">×10</b>. A whiff costs no time but <b style="color:#c98f86">drags the pick</b>
         and resets the chain to zero. Letting a tumbler expire untouched is safe.<br>
         The longer you last, the more tumblers come at once.<br><br>
-        <kbd>Left click</kbd> pick &nbsp;·&nbsp; <kbd>Right click</kbd> hold to speed up &nbsp;·&nbsp; <kbd>F9</kbd> pause
+        <span class="d-only"><kbd>Left click</kbd> pick &nbsp;·&nbsp; <kbd>Right click</kbd> hold to speed up &nbsp;·&nbsp; <kbd>F9</kbd> pause</span>
+        <span class="t-only"><kbd>Tap</kbd> anywhere to pick &nbsp;·&nbsp; hold <kbd>BOOST</kbd> to speed up</span>
       </p>
       <button class="btn" id="startBtn">START PICKING</button>
     </div>
@@ -594,9 +623,6 @@
       <button class="btn" id="againBtn">PLAY AGAIN</button>
     </div>
   </div>
-
-  </div>
-</div>
 
 <script>
 (function(){
@@ -656,9 +682,27 @@ var S = {
 var parts = [];
 var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/* mobile: lighter blurs and fewer canvas objects. SVG gaussian blurs repaint every
+   frame here and are the single most expensive thing on a phone GPU. */
+var isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+var DUST_N     = isTouch ? 14 : 30;
+var SPARK_ODDS = isTouch ? 0.45 : 0.80;
+var SMOKE_EVERY= isTouch ? 0.075 : 0.050;
+var SMOKE_PER  = isTouch ? 1 : 2;
+if(isTouch){
+  document.body.classList.add("touch");
+  wedgesGold.setAttribute("filter","url(#glowGoldLite)");
+  wedgesBlue.setAttribute("filter","url(#glowBlueLite)");
+  needle.setAttribute("filter","url(#needleGlowLite)");
+}
+
 /* ---------- audio ---------- */
 var AC=null;
-function actx(){ if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return AC; }
+function actx(){
+  if(!AC){ try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+  if(AC && AC.state==="suspended" && AC.resume) AC.resume();   // iOS starts suspended
+  return AC;
+}
 /* struck metal: inharmonic partials + a filtered noise transient for the strike.
    harmonic ratios would read as a musical bell, so these are deliberately off. */
 var METAL = [1, 1.83, 2.68, 3.52, 4.71];
@@ -859,7 +903,7 @@ function stepShocks(dt){
 
 /* ---------- ambient dust ---------- */
 var dust=[];
-for(var di=0;di<30;di++) dust.push({
+for(var di=0;di<DUST_N;di++) dust.push({
   x:Math.random()*648, y:Math.random()*874,
   vx:(Math.random()-0.5)*9, vy:-3-Math.random()*11,
   r:0.5+Math.random()*1.5, a:0.10+Math.random()*0.26, ph:Math.random()*6.283
@@ -1051,9 +1095,9 @@ function frame(ts){
 
   if(!reduced){
     /* sparks shed off the tip, kicked backwards along the sweep */
-    var shed = S.boost?2:1;
+    var shed = (S.boost && !isTouch) ? 2 : 1;
     for(var q=0;q<shed;q++){
-      if(Math.random()<0.8){
+      if(Math.random()<SPARK_ODDS){
         var back=(S.ang-S.dir*10-90)*Math.PI/180;
         parts.push({
           x:tip[0]+(Math.random()-0.5)*5, y:tip[1]+(Math.random()-0.5)*5,
@@ -1065,10 +1109,10 @@ function frame(ts){
     }
     /* smoke wisps, throttled so they stay sparse */
     smokeAcc+=dt;
-    if(smokeAcc > (S.boost?0.032:0.050)){
+    if(smokeAcc > (S.boost?SMOKE_EVERY*0.65:SMOKE_EVERY)){
       smokeAcc=0;
       /* seed along the shaft, not just the tip, so the whole pick smoulders */
-      for(var sp2=0; sp2<2; sp2++){
+      for(var sp2=0; sp2<SMOKE_PER; sp2++){
         var sr=94+Math.random()*(NEEDLE_LEN-94);
         var spt=polar(S.ang, sr);
         var lerp=(sr-94)/(NEEDLE_LEN-94);      // thicker and faster toward the tip
@@ -1166,16 +1210,32 @@ document.addEventListener("keyup",function(e){
   if(e.code==="ShiftLeft"||e.code==="ShiftRight") S.boost=false;
 });
 cv.style.pointerEvents="none";
-$("stage").addEventListener("touchstart",function(e){
-  e.preventDefault();
-  if(S.mode==="play"){
-    if(e.touches.length>1) S.boost=true; else doPick();
-  }
+
+/* tap anywhere to pick. listening on the document rather than the stage means the
+   letterboxed margin is live too, so there is no dead zone around the lock. */
+document.addEventListener("touchstart",function(e){
+  if(e.target.closest && e.target.closest(".mbtn,.btn")) return;
+  if(S.mode!=="play") return;
+  e.preventDefault();          // also suppresses the synthetic mousedown, so no double pick
+  doPick();
 },{passive:false});
-$("stage").addEventListener("touchend",function(){ S.boost=false; });
+document.addEventListener("touchmove",function(e){
+  if(S.mode==="play") e.preventDefault();
+},{passive:false});
+
+var boostBtn=$("boostBtn"), pauseBtn=$("pauseBtn");
+function boostOn(e){ e.preventDefault(); e.stopPropagation(); S.boost=true; boostBtn.classList.add("on"); }
+function boostOff(){ S.boost=false; boostBtn.classList.remove("on"); }
+boostBtn.addEventListener("pointerdown",boostOn);
+["pointerup","pointercancel","pointerleave"].forEach(function(ev){
+  boostBtn.addEventListener(ev,boostOff);
+});
+pauseBtn.addEventListener("click",function(e){ e.stopPropagation(); togglePause(); });
+pauseVeil.addEventListener("click",function(){ if(S.mode==="pause") togglePause(); });
 
 function togglePause(){
-  if(S.mode==="play"){ S.mode="pause"; pauseVeil.classList.remove("hidden"); }
+  if(S.mode==="play"){ S.mode="pause"; S.boost=false; boostBtn.classList.remove("on");
+    pauseVeil.classList.remove("hidden"); }
   else if(S.mode==="pause"){ S.mode="play"; S.last=performance.now(); pauseVeil.classList.add("hidden"); }
 }
 function begin(){ actx(); startVeil.classList.add("hidden"); reset(); }
@@ -1184,11 +1244,37 @@ $("startBtn").addEventListener("click",function(e){ e.stopPropagation(); begin()
 $("againBtn").addEventListener("click",function(e){ e.stopPropagation(); again(); });
 
 /* ---------- fit to viewport ---------- */
-function fit(){
-  var s=Math.min(window.innerWidth/648, window.innerHeight/874, 1);
-  wrap.style.transform="scale("+s+")";
+/* portrait phones are far taller than the 648x874 scene, so plain "contain" wastes
+   a third of the screen. allow a little horizontal overscan instead: the lock spans
+   x142-506, so cropping up to ~7% a side never touches it. */
+var OVERSCAN = 1.15;
+var lastQ=0;
+function fitCanvas(s){
+  /* below 1:1 the 648x874 buffer is already supersampled, so only upscaling needs more */
+  var q = s>1 ? Math.min(2, s*Math.min(window.devicePixelRatio||1,2)) : 1;
+  q = Math.round(q*4)/4;
+  if(q===lastQ) return;
+  lastQ=q;
+  cv.width=Math.round(648*q); cv.height=Math.round(874*q);
+  ctx.setTransform(q,0,0,q,0,0);
 }
-window.addEventListener("resize",fit); fit();
+function fit(){
+  var vv=window.visualViewport;
+  var vw=(vv&&vv.width)||window.innerWidth;
+  var vh=(vv&&vv.height)||window.innerHeight;
+  var s;
+  if(vh/vw > 874/648){
+    s = Math.min(vw*OVERSCAN/648, vh/874);   // tall screen: fill, crop sides slightly
+  } else {
+    s = Math.min(vw/648, vh/874, 1);         // wide screen: contain, never upscale
+  }
+  wrap.style.transform="scale("+s+")";
+  fitCanvas(s);
+}
+window.addEventListener("resize",fit);
+window.addEventListener("orientationchange",function(){ setTimeout(fit,120); });
+if(window.visualViewport) window.visualViewport.addEventListener("resize",fit);
+fit();
 
 })();
 </script>
