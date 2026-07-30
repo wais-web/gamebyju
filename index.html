@@ -55,11 +55,11 @@
   #sign{transform-box:fill-box; transform-origin:50% 0%; animation:sway 3.4s infinite alternate ease-in-out}
 
   /* ---- overlays ---- */
-  #missVeil{position:fixed; inset:0; pointer-events:none; opacity:0; z-index:12;
+  #missVeil{position:fixed; inset:0; pointer-events:none; opacity:0; z-index:12; will-change:opacity;
     background:radial-gradient(ellipse at center, rgba(255,45,26,0) 42%, rgba(255,45,26,.62) 100%);}
 
   .veil{position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-    background:rgba(6,5,9,.72); backdrop-filter:blur(2px); z-index:30;
+    background:rgba(6,5,9,.80); z-index:30;
     padding:calc(12px + env(safe-area-inset-top)) 14px calc(12px + env(safe-area-inset-bottom));}
   .hidden{display:none !important}
 
@@ -177,14 +177,6 @@
         <stop offset="0" stop-color="#9d7c5c"/>
         <stop offset=".5" stop-color="#6d543d"/><stop offset="1" stop-color="#3f3125"/>
       </linearGradient>
-      <linearGradient id="wedgeG" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#ffe789"/><stop offset=".5" stop-color="#ffd033"/>
-        <stop offset="1" stop-color="#d99310"/>
-      </linearGradient>
-      <linearGradient id="pickedG" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#8fd4ff"/><stop offset=".55" stop-color="#43a0e0"/>
-        <stop offset="1" stop-color="#215f96"/>
-      </linearGradient>
       <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stop-color="#7d6042"/><stop offset=".5" stop-color="#5c4630"/>
         <stop offset="1" stop-color="#3a2c1e"/>
@@ -207,79 +199,6 @@
         <stop offset=".62" stop-color="#000" stop-opacity="0"/>
         <stop offset="1" stop-color="#000" stop-opacity=".7"/>
       </radialGradient>
-      <filter id="glowGold" filterUnits="userSpaceOnUse" x="120" y="362" width="408" height="408">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="wide"/>
-        <feFlood flood-color="#ffc226" flood-opacity=".85"/>
-        <feComposite in2="wide" operator="in" result="g1"/>
-        <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="tight"/>
-        <feFlood flood-color="#fff0b8" flood-opacity=".95"/>
-        <feComposite in2="tight" operator="in" result="g2"/>
-        <feMerge>
-          <feMergeNode in="g1"/><feMergeNode in="g1"/>
-          <feMergeNode in="g2"/><feMergeNode in="SourceGraphic"/>
-        </feMerge>
-      </filter>
-      <filter id="glowBlue" filterUnits="userSpaceOnUse" x="120" y="362" width="408" height="408">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="wide"/>
-        <feFlood flood-color="#2f9be8" flood-opacity=".85"/>
-        <feComposite in2="wide" operator="in" result="g1"/>
-        <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="tight"/>
-        <feFlood flood-color="#d2ecff" flood-opacity=".95"/>
-        <feComposite in2="tight" operator="in" result="g2"/>
-        <feMerge>
-          <feMergeNode in="g1"/><feMergeNode in="g1"/>
-          <feMergeNode in="g2"/><feMergeNode in="SourceGraphic"/>
-        </feMerge>
-      </filter>
-      <filter id="needleGlow" filterUnits="userSpaceOnUse" x="120" y="362" width="408" height="408">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="10" result="w"/>
-        <feFlood flood-color="#5d9bff" flood-opacity=".9"/>
-        <feComposite in2="w" operator="in" result="n1"/>
-        <feGaussianBlur in="SourceAlpha" stdDeviation="3.2" result="tt"/>
-        <feFlood flood-color="#e6f0ff" flood-opacity="1"/>
-        <feComposite in2="tt" operator="in" result="n2"/>
-        <feMerge><feMergeNode in="n1"/><feMergeNode in="n1"/><feMergeNode in="n2"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="glowGoldLite" filterUnits="userSpaceOnUse" x="140" y="382" width="368" height="368">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="4.5" result="b"/>
-        <feFlood flood-color="#ffc226" flood-opacity=".9"/>
-        <feComposite in2="b" operator="in" result="g"/>
-        <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="glowBlueLite" filterUnits="userSpaceOnUse" x="140" y="382" width="368" height="368">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="4.5" result="b"/>
-        <feFlood flood-color="#2f9be8" flood-opacity=".9"/>
-        <feComposite in2="b" operator="in" result="g"/>
-        <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="needleGlowLite" filterUnits="userSpaceOnUse" x="140" y="382" width="368" height="368">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="b"/>
-        <feFlood flood-color="#6ea8ff" flood-opacity=".9"/>
-        <feComposite in2="b" operator="in" result="g"/>
-        <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="glowRed" filterUnits="userSpaceOnUse" x="104" y="346" width="440" height="440">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="w"/>
-        <feFlood flood-color="#ff3320" flood-opacity=".92"/>
-        <feComposite in2="w" operator="in" result="r1"/>
-        <feGaussianBlur in="SourceAlpha" stdDeviation="2.8" result="tt"/>
-        <feFlood flood-color="#ffb4a6" flood-opacity=".95"/>
-        <feComposite in2="tt" operator="in" result="r2"/>
-        <feMerge><feMergeNode in="r1"/><feMergeNode in="r1"/><feMergeNode in="r2"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <radialGradient id="missWash" cx=".5" cy=".5" r=".5">
-        <stop offset=".28" stop-color="#ff2d1a" stop-opacity="0"/>
-        <stop offset="1" stop-color="#ff2d1a" stop-opacity=".6"/>
-      </radialGradient>
-      <filter id="textGlow" filterUnits="userSpaceOnUse" x="196" y="486" width="256" height="176">
-        <feGaussianBlur in="SourceAlpha" stdDeviation="4.5" result="b"/>
-        <feFlood flood-color="#ffcf7a" flood-opacity=".6"/>
-        <feComposite in2="b" operator="in" result="g"/>
-        <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <filter id="emberGlow" filterUnits="userSpaceOnUse" x="0" y="80" width="648" height="420">
-        <feGaussianBlur stdDeviation="14"/>
-      </filter>
     </defs>
 
     <!-- ================= BACKGROUND ================= -->
@@ -496,23 +415,8 @@
 
       <!-- inner vignette so the ring reads deep -->
       <circle cx="324" cy="566" r="154" fill="url(#faceVig)" pointer-events="none"/>
-      <!-- dynamic wedges, one filtered group per colour -->
-      <g id="wedgesGold" filter="url(#glowGold)"></g>
-      <g id="wedgesBlue" filter="url(#glowBlue)"></g>
-
-      <!-- miss feedback -->
-      <circle id="missWashC" cx="324" cy="566" r="152" fill="url(#missWash)" opacity="0" pointer-events="none"/>
-      <path id="missArc" fill="#ff4a38" opacity="0" filter="url(#glowRed)" pointer-events="none"/>
-      <circle id="missRing" cx="324" cy="566" r="150" fill="none" stroke="#ff4a38"
-              stroke-width="5" opacity="0" filter="url(#glowRed)" pointer-events="none"/>
-
-      <!-- needle -->
-      <g id="needleG">
-        <line id="needle" x1="324" y1="566" x2="324" y2="420" stroke="#dce9ff" stroke-width="3"
-              stroke-linecap="round" filter="url(#needleGlow)"/>
-        <line id="needle2" x1="324" y1="566" x2="324" y2="420" stroke="#7fa8ff" stroke-width="6"
-              stroke-linecap="round" opacity=".45" filter="url(#soft2)"/>
-      </g>
+      <!-- wedges, needle and miss feedback are drawn on the canvas layer.
+           nothing inside this svg changes per frame, so it rasterises once. -->
 
       <!-- hub -->
       <circle cx="324" cy="566" r="92" fill="#0d0c0c" opacity=".9"/>
@@ -520,6 +424,7 @@
       <circle cx="324" cy="566" r="88" fill="none" stroke="#5e5040" stroke-width="2.5"/>
       <circle cx="324" cy="566" r="82" fill="none" stroke="#000" stroke-width="1.5" opacity=".45"/>
       <path d="M262 508a88 88 0 0 1 40-24" fill="none" stroke="#7d6a55" stroke-width="3" opacity=".5"/>
+      <ellipse cx="324" cy="572" rx="70" ry="46" fill="#ffb44a" opacity=".10" filter="url(#soft)"/>
 
       <!-- chain progress toward the next multiplier -->
       <circle id="comboArc" cx="324" cy="566" r="83" fill="none" stroke="#ffd84d" stroke-width="2.6"
@@ -528,7 +433,7 @@
 
       <text id="bonus" x="324" y="512" text-anchor="middle" class="num" font-size="23" opacity="0">+1.5</text>
       <text x="324" y="532" text-anchor="middle" class="lbl" font-size="11">TIME REMAINING</text>
-      <text id="timeT" x="324" y="576" text-anchor="middle" class="num" font-size="41" filter="url(#textGlow)">30.0</text>
+      <text id="timeT" x="324" y="576" text-anchor="middle" class="num" font-size="41">30.0</text>
       <text x="324" y="598" text-anchor="middle" class="lbl" font-size="10">SCORE</text>
       <text id="scoreT" x="324" y="618" text-anchor="middle" font-size="20" fill="#d9b877" font-family="Georgia,serif">0</text>
       <text id="multT" x="324" y="642" text-anchor="middle" font-size="17" fill="#ffd84d"
@@ -631,7 +536,6 @@
 /* ---------- geometry ---------- */
 var CX = 324, CY = 566;
 var R_IN = 100, R_OUT = 148, NEEDLE_LEN = 146;
-var SVGNS = "http://www.w3.org/2000/svg";
 
 /* ---------- tuning ---------- */
 var START_TIME    = 30;
@@ -663,11 +567,10 @@ function blueChance(e){ return Math.max(0.22, 0.42 - e*0.0023); }
 
 /* ---------- refs ---------- */
 var $ = function(id){ return document.getElementById(id); };
-var wedgesGold=$("wedgesGold"), wedgesBlue=$("wedgesBlue"),
-    needle=$("needle"), needle2=$("needle2"),
+var 
     timeT=$("timeT"), scoreT=$("scoreT"), bonusT=$("bonus"),
     lockG=$("lock"), critter=$("critter"),
-    missRing=$("missRing"), missArc=$("missArc"), missWashC=$("missWashC"), missVeil=$("missVeil"),
+    missVeil=$("missVeil"),
     multT=$("multT"), comboArc=$("comboArc"),
     startVeil=$("startVeil"), pauseVeil=$("pauseVeil"), overVeil=$("overVeil"),
     cv=$("fx"), ctx=cv.getContext("2d"), wrap=$("wrap");
@@ -676,7 +579,7 @@ var wedgesGold=$("wedgesGold"), wedgesBlue=$("wedgesBlue"),
 var S = {
   mode:"idle", t:START_TIME, score:0, picks:0, elapsed:0,
   combo:0, bestCombo:0, multPulse:0,
-  ang:0, dir:1, boost:false, slow:0, spawnIn:0,
+  ang:0, dir:1, boost:false, slow:0, spawnIn:0, angT:0, curSpeed:0, missAng:0,
   wedges:[], shake:0, bonusTimer:0, revFlash:0, missFx:0, last:0
 };
 var parts = [];
@@ -689,12 +592,7 @@ var DUST_N     = isTouch ? 14 : 30;
 var SPARK_ODDS = isTouch ? 0.45 : 0.80;
 var SMOKE_EVERY= isTouch ? 0.075 : 0.050;
 var SMOKE_PER  = isTouch ? 1 : 2;
-if(isTouch){
-  document.body.classList.add("touch");
-  wedgesGold.setAttribute("filter","url(#glowGoldLite)");
-  wedgesBlue.setAttribute("filter","url(#glowBlueLite)");
-  needle.setAttribute("filter","url(#needleGlowLite)");
-}
+if(isTouch) document.body.classList.add("touch");
 
 /* ---------- audio ---------- */
 var AC=null;
@@ -794,15 +692,7 @@ function inWedge(a,w){
 }
 
 /* ---------- wedges ---------- */
-function clearWedges(){
-  for(var i=0;i<S.wedges.length;i++){
-    var n=S.wedges[i].node;
-    if(n && n.parentNode) n.parentNode.removeChild(n);
-  }
-  S.wedges.length=0;
-  while(wedgesGold.firstChild) wedgesGold.removeChild(wedgesGold.firstChild);
-  while(wedgesBlue.firstChild) wedgesBlue.removeChild(wedgesBlue.firstChild);
-}
+function clearWedges(){ S.wedges.length=0; }
 function spawnWedge(){
   if(S.wedges.length>=MAX_WEDGES) return;
   var size=wedgeSize(S.elapsed), life=wedgeLife(S.elapsed);
@@ -818,23 +708,112 @@ function spawnWedge(){
   }
   if(c<0) return;                          // ring too crowded, skip this beat
 
-  var isBlue = Math.random()<blueChance(S.elapsed);
-  var p=document.createElementNS(SVGNS,"path");
-  p.setAttribute("fill", isBlue?"url(#pickedG)":"url(#wedgeG)");
-  p.setAttribute("stroke", isBlue?"#bfe6ff":"#fff0b0");
-  p.setAttribute("stroke-width","0.9");
-  p.setAttribute("opacity","0");
-  (isBlue?wedgesBlue:wedgesGold).appendChild(p);
-  S.wedges.push({center:c,size0:size,blue:isBlue,life:life,max:life,node:p,age:0});
+  S.wedges.push({center:c,size0:size,blue:Math.random()<blueChance(S.elapsed),
+                 life:life,max:life,age:0});
 }
-function paintWedge(w){
-  var s=curSize(w);
-  if(s<=0.4){ w.node.setAttribute("opacity","0"); return; }
-  var a0=curA0(w);
-  w.node.setAttribute("d", arcPath(a0, a0+s, R_IN, R_OUT));
-  var fin=Math.min(1, w.age/0.18);         // quick fade in on spawn
-  var k=shrinkK(w);
-  w.node.setAttribute("opacity", (fin*(0.40+0.60*k)).toFixed(3));
+function wedgeAlpha(w){
+  return Math.min(1, w.age/0.18) * (0.40+0.60*shrinkK(w));
+}
+
+/* ---------- ring renderer (was SVG + gaussian filters) ----------
+   glow is faked with a few additive strokes at widening lineWidth. a real blur costs
+   ~450k filtered pixels a frame across three regions; this costs three strokes. */
+var TAU=6.28318530718, RAD=Math.PI/180, R_MID=(R_IN+R_OUT)/2, R_BAND=R_OUT-R_IN;
+var gWash=null, wgCache={};
+function initGrads(){
+  gWash=ctx.createRadialGradient(CX,CY,40,CX,CY,152);
+  gWash.addColorStop(0,"rgba(255,45,26,0)"); gWash.addColorStop(1,"rgba(255,45,26,0.60)");
+}
+/* the original used objectBoundingBox gradients, so every wedge was lit top-to-bottom
+   in screen space. rebuilt per angular bucket and cached, 30 buckets a colour. */
+function wedgeGrad(blue,cDeg){
+  var b=Math.round(cDeg/12)*12, key=(blue?"b":"g")+b;
+  if(wgCache[key]) return wgCache[key];
+  var hw=WEDGE_SIZE/2, ys=[];
+  for(var k=0;k<2;k++){
+    var a=((k?b+hw:b-hw)-90)*RAD;
+    ys.push(CY+Math.sin(a)*R_IN, CY+Math.sin(a)*R_OUT);
+  }
+  var top=Math.min.apply(null,ys), bot=Math.max.apply(null,ys);
+  if(bot-top<12){ top-=8; bot+=8; }
+  var g=ctx.createLinearGradient(0,top,0,bot);
+  if(blue){ g.addColorStop(0,"#8fd4ff"); g.addColorStop(0.55,"#43a0e0"); g.addColorStop(1,"#215f96"); }
+  else    { g.addColorStop(0,"#ffe789"); g.addColorStop(0.5,"#ffd033"); g.addColorStop(1,"#d99310"); }
+  wgCache[key]=g;
+  return g;
+}
+function ringClip(){
+  ctx.beginPath();
+  ctx.arc(CX,CY,182,0,TAU);
+  ctx.arc(CX,CY,91,0,TAU,true);   // hole keeps the hub and readout clear
+  ctx.clip();
+}
+/* a real sector outline: two arcs joined by radial edges. filling this has no line
+   caps at all, which is what went wrong when the body was a stroked arc band. */
+function sectorPath(cDeg,sizeDeg,ri,ro){
+  var a0=(cDeg-sizeDeg/2-90)*RAD, a1=(cDeg+sizeDeg/2-90)*RAD;
+  ctx.beginPath();
+  ctx.arc(CX,CY,ro,a0,a1);
+  ctx.arc(CX,CY,ri,a1,a0,true);
+  ctx.closePath();
+}
+function drawRing(){
+  if(!gWash) initGrads();
+  ctx.save(); ringClip();
+  ctx.lineCap="butt"; ctx.lineJoin="round";
+
+  var blur=isTouch?9:14, passes=isTouch?1:2;
+  for(var i=0;i<S.wedges.length;i++){
+    var w=S.wedges[i], s=curSize(w);
+    if(s<=0.6) continue;
+    ctx.globalAlpha=wedgeAlpha(w);
+    sectorPath(w.center,s,R_IN,R_OUT);
+    /* shadow renders behind the shape, so this reproduces the old filter's layering:
+       soft bloom underneath, crisp gradient body on top. */
+    ctx.shadowColor=w.blue?"#3aa6f0":"#ffc733";
+    ctx.shadowBlur=blur;
+    ctx.fillStyle=wedgeGrad(w.blue,w.center);
+    for(var q=0;q<passes;q++) ctx.fill();
+    ctx.shadowBlur=0; ctx.shadowColor="rgba(0,0,0,0)";
+    /* bright rim, as the svg stroke gave it */
+    ctx.lineWidth=1;
+    ctx.strokeStyle=w.blue?"#bfe6ff":"#fff0b0";
+    ctx.stroke();
+  }
+  ctx.globalAlpha=1;
+
+  /* needle: additive halo then a hard core */
+  var t1=polar(S.ang,NEEDLE_LEN);
+  ctx.lineCap="round";   // scoped to the needle; wedges reset to butt each frame
+  ctx.globalCompositeOperation="lighter";
+  var pulse=S.revFlash>0?S.revFlash/0.3:0;
+  ctx.strokeStyle="#4a86ff"; ctx.globalAlpha=0.40+pulse*0.35;
+  ctx.lineWidth=9+pulse*7;
+  ctx.beginPath(); ctx.moveTo(CX,CY); ctx.lineTo(t1[0],t1[1]); ctx.stroke();
+  ctx.strokeStyle="#bcd6ff"; ctx.globalAlpha=0.55+pulse*0.3;
+  ctx.lineWidth=4.5+pulse*3;
+  ctx.beginPath(); ctx.moveTo(CX,CY); ctx.lineTo(t1[0],t1[1]); ctx.stroke();
+  ctx.globalCompositeOperation="source-over";
+  ctx.globalAlpha=1;
+  ctx.strokeStyle=S.slow>0?"#e2a79c":"#eaf2ff";
+  ctx.lineWidth=2.6+pulse*1.6;
+  ctx.beginPath(); ctx.moveTo(CX,CY); ctx.lineTo(t1[0],t1[1]); ctx.stroke();
+
+  /* miss feedback */
+  if(S.missFx>0){
+    var mk=S.missFx/MISS_FX_DUR, me=mk*mk;
+    ctx.globalAlpha=me*0.70; ctx.fillStyle=gWash;
+    ctx.beginPath(); ctx.arc(CX,CY,152,0,TAU); ctx.fill();
+    ctx.globalCompositeOperation="lighter";
+    ctx.globalAlpha=me*0.85; ctx.fillStyle="#ff3320";
+    sectorPath(S.missAng,26,R_IN-4,R_OUT+4); ctx.fill();
+    ctx.strokeStyle="#ff3320";
+    ctx.globalAlpha=me*0.9;  ctx.lineWidth=1+4*mk;
+    ctx.beginPath(); ctx.arc(CX,CY,150+(1-mk)*18,0,TAU); ctx.stroke();
+    ctx.globalCompositeOperation="source-over";
+    ctx.globalAlpha=1;
+  }
+  ctx.restore();
 }
 
 /* ---------- needle trail, smoke, hit effects ---------- */
@@ -931,6 +910,7 @@ function burst(x,y,n,hue){
 }
 function stepParts(dt,ts){
   ctx.clearRect(0,0,648,874);
+  if(S.mode==="play"||S.mode==="pause") drawRing();
   if(!reduced){ stepDust(dt,ts); stepSmoke(dt); drawTrail(); }
   stepArcs(dt); stepShocks(dt);
   for(var i=parts.length-1;i>=0;i--){
@@ -949,13 +929,7 @@ function stepParts(dt,ts){
 }
 
 /* ---------- actions ---------- */
-function clearMissFx(){
-  S.missFx=0;
-  missArc.setAttribute("opacity","0");
-  missWashC.setAttribute("opacity","0");
-  missRing.setAttribute("opacity","0");
-  missVeil.style.opacity="0";
-}
+function clearMissFx(){ S.missFx=0; missVeil.style.opacity="0"; }
 function showBonus(txt,color){
   bonusT.textContent=txt;
   bonusT.setAttribute("fill",color);
@@ -967,8 +941,17 @@ function hop(){
   critter.style.transform="translateY(-7px)";
   setTimeout(function(){ critter.style.transform="translateY(0)"; },170);
 }
+function liveAngle(){
+  /* at 30fps the needle jumps ~6.5deg between frames, so reading the last frame's
+     angle throws away up to half a wedge. extrapolate to the actual input moment. */
+  var now=(window.performance&&performance.now)?performance.now():Date.now();
+  var dt=Math.min(0.05,Math.max(0,(now-S.angT)/1000));
+  return norm(S.ang + S.dir*S.curSpeed*dt);
+}
 function doPick(){
   if(S.mode!=="play") return;              // no cooldown, every click is read
+  S.ang=liveAngle();                       // settle the needle to "now" before testing
+  S.angT=(window.performance&&performance.now)?performance.now():Date.now();
   var idx=-1;
   for(var i=0;i<S.wedges.length;i++){
     if(inWedge(S.ang,S.wedges[i])){ idx=i; break; }
@@ -1010,7 +993,7 @@ function doPick(){
     S.shake=0.14;
     S.combo=0;                         // whiffing breaks the chain; letting one expire does not
     S.missFx=MISS_FX_DUR;
-    missArc.setAttribute("d", arcPath(S.ang-13, S.ang+13, R_IN, R_OUT));  // mark where it whiffed
+    S.missAng=S.ang;                   // mark where it whiffed
     sMiss();
   }
 }
@@ -1026,9 +1009,9 @@ function reset(){
   parts.length=0; trail.length=0; smoke.length=0; shocks.length=0; arcs.length=0;
   smokeAcc=0; ctx.clearRect(0,0,648,874);
   bonusT.setAttribute("opacity","0");
-  needle.setAttribute("stroke-width","3");
-  needle.setAttribute("stroke","#dce9ff");
-  needle2.setAttribute("opacity","0.45");
+  cache.t=""; cache.score=""; cache.mult=""; cache.lowT=null; cache.comboVis=null;
+  S.angT=(window.performance&&performance.now)?performance.now():Date.now();
+  S.curSpeed=NEEDLE_SPEED;
   lockG.removeAttribute("transform");
   clearMissFx();
   sync();
@@ -1042,24 +1025,31 @@ function gameOver(){
   overVeil.classList.remove("hidden");
 }
 var ARC_LEN=521.5;
+var cache={t:"",score:"",mult:"",lowT:null,comboVis:null};
 function sync(){
-  timeT.textContent=Math.max(0,S.t).toFixed(1);
-  scoreT.textContent=S.score.toLocaleString();
-  timeT.setAttribute("fill", S.t<=5 ? "#ff8a7a" : "#f2e8d8");
+  /* every write here invalidates svg text layout, so gate each one on a real change */
+  var ts_=Math.max(0,S.t).toFixed(1);
+  if(ts_!==cache.t){ cache.t=ts_; timeT.textContent=ts_; }
+  var low=S.t<=5;
+  if(low!==cache.lowT){ cache.lowT=low; timeT.setAttribute("fill", low?"#ff8a7a":"#f2e8d8"); }
+  var sc=S.score.toLocaleString();
+  if(sc!==cache.score){ cache.score=sc; scoreT.textContent=sc; }
 
-  var mult=multFor(S.combo);
-  if(S.combo>0){
-    multT.setAttribute("opacity","1");
-    multT.textContent="\u00d7"+mult+"  \u00b7  "+S.combo+" chain";
-    // arc fills toward the next tier, solid once the ceiling is reached
-    var prog = mult>=COMBO_MAX ? 1 : (S.combo%COMBO_STEP)/COMBO_STEP;
-    comboArc.setAttribute("opacity", (0.35+0.55*prog).toFixed(2));
-    comboArc.setAttribute("stroke-dashoffset", (ARC_LEN*(1-prog)).toFixed(1));
-    comboArc.setAttribute("stroke", mult>=COMBO_MAX ? "#ffe89a" : "#ffd84d");
-  } else {
-    multT.setAttribute("opacity","0");
-    comboArc.setAttribute("opacity","0");
-    comboArc.setAttribute("stroke-dashoffset", ARC_LEN);
+  var mult=multFor(S.combo), vis=S.combo>0;
+  if(vis){
+    var mt="\u00d7"+mult+"  \u00b7  "+S.combo+" chain";
+    if(mt!==cache.mult){
+      cache.mult=mt; multT.textContent=mt;
+      var prog = mult>=COMBO_MAX ? 1 : (S.combo%COMBO_STEP)/COMBO_STEP;
+      comboArc.setAttribute("opacity", (0.35+0.55*prog).toFixed(2));
+      comboArc.setAttribute("stroke-dashoffset", (ARC_LEN*(1-prog)).toFixed(1));
+      comboArc.setAttribute("stroke", mult>=COMBO_MAX ? "#ffe89a" : "#ffd84d");
+    }
+  }
+  if(vis!==cache.comboVis){
+    cache.comboVis=vis;
+    multT.setAttribute("opacity", vis?"1":"0");
+    if(!vis){ comboArc.setAttribute("opacity","0"); comboArc.setAttribute("stroke-dashoffset",ARC_LEN); cache.mult=""; }
   }
 }
 
@@ -1081,14 +1071,12 @@ function frame(ts){
       var ek=Math.max(0,S.slow/MISS_SLOW_EASE);
       slowMul = MISS_SLOW_MUL + (1-MISS_SLOW_MUL)*(1-ek);   // recover
     }
-    needle.setAttribute("stroke","#c98f86");
-    if(S.slow<=0) needle.setAttribute("stroke","#dce9ff");
   }
   var sp = NEEDLE_SPEED * (S.boost?BOOST_MUL:1) * slowMul;
+  S.curSpeed = sp;
   S.ang = norm(S.ang + S.dir*sp*dt);
-  var tip=polar(S.ang,NEEDLE_LEN), tip2=polar(S.ang,NEEDLE_LEN-30);
-  needle.setAttribute("x2",tip[0]); needle.setAttribute("y2",tip[1]);
-  needle2.setAttribute("x2",tip2[0]); needle2.setAttribute("y2",tip2[1]);
+  S.angT = ts;
+  var tip=polar(S.ang,NEEDLE_LEN);
   /* motion trail */
   trail.push({x:tip[0],y:tip[1]});
   while(trail.length>TRAIL_LEN) trail.shift();
@@ -1132,16 +1120,11 @@ function frame(ts){
     S.spawnIn = spawnEvery(S.elapsed) * (0.75+Math.random()*0.5);
   }
 
-  /* age, narrow, repaint */
+  /* age and narrow; drawing happens on the canvas pass */
   for(var i=S.wedges.length-1;i>=0;i--){
     var w=S.wedges[i];
     w.life-=dt; w.age+=dt;
-    if(w.life<=0){
-      if(w.node && w.node.parentNode) w.node.parentNode.removeChild(w.node);
-      S.wedges.splice(i,1);
-      continue;
-    }
-    paintWedge(w);
+    if(w.life<=0) S.wedges.splice(i,1);
   }
 
   /* clock */
@@ -1152,12 +1135,7 @@ function frame(ts){
     S.bonusTimer-=dt;
     bonusT.setAttribute("opacity", Math.max(0,Math.min(1,S.bonusTimer/0.45)).toFixed(2));
   }
-  if(S.revFlash>0){
-    S.revFlash-=dt;
-    var k=Math.max(0,S.revFlash/0.3);
-    needle.setAttribute("stroke-width",(3+k*3.5).toFixed(1));
-    needle2.setAttribute("opacity",(0.45+k*0.45).toFixed(2));
-  }
+  if(S.revFlash>0) S.revFlash-=dt;
   if(S.multPulse>0){
     S.multPulse-=dt;
     var pk=Math.max(0,S.multPulse/0.4);
@@ -1166,13 +1144,8 @@ function frame(ts){
   }
   if(S.missFx>0){
     S.missFx-=dt;
-    var mk=Math.max(0,S.missFx/MISS_FX_DUR), me=mk*mk;
-    missArc.setAttribute("opacity",(me*0.95).toFixed(3));
-    missWashC.setAttribute("opacity",(me*0.70).toFixed(3));
-    missRing.setAttribute("opacity",(me*0.85).toFixed(3));
-    missRing.setAttribute("r",(150+(1-mk)*18).toFixed(1));      // ring punches outward
-    missRing.setAttribute("stroke-width",(1+4*mk).toFixed(2));
-    missVeil.style.opacity=(me*0.85).toFixed(3);
+    var mk=Math.max(0,S.missFx/MISS_FX_DUR);
+    missVeil.style.opacity=(mk*mk*0.85).toFixed(3);
     if(S.missFx<=0) clearMissFx();
   }
   if(S.shake>0){
@@ -1257,6 +1230,8 @@ function fitCanvas(s){
   lastQ=q;
   cv.width=Math.round(648*q); cv.height=Math.round(874*q);
   ctx.setTransform(q,0,0,q,0,0);
+  gWash=null; wgCache={};      // canvas gradients are context-bound
+
 }
 function fit(){
   var vv=window.visualViewport;
